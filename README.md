@@ -8,7 +8,8 @@ Pythia provides a structured environment for building and running discrete-event
 and continuous-time simulations.  The framework is built around a clean,
 extensible API that separates configuration, state, model logic, and
 orchestration.  Ready-made model modules cover population dynamics, agent
-interaction, and broadcast communication.
+interaction, and broadcast communication, while the utility layer adds
+data collection, visualisation, and statistical analysis tools.
 
 ## Project structure
 
@@ -20,62 +21,121 @@ pythia/
 │   │   ├── state.py            # SimulationState — mutable per-step carrier
 │   │   ├── model.py            # BaseModel — abstract contract for all models
 │   │   ├── runner.py           # SimulationRunner — run-loop orchestration
+│   │   ├── simulator.py        # Simulator — multi-run batch execution
+│   │   ├── collector.py        # DataCollector — uniform-interval measurement
+│   │   ├── data_table.py       # DataTable — time-indexed float table
+│   │   ├── data_tracer.py      # DataTracer — per-object trace collection
+│   │   ├── tracer.py           # Tracer — single-run trace driver
+│   │   ├── reachability.py     # ReachabilityEstimator — Monte Carlo analysis
 │   │   ├── events.py           # EventBus — lifecycle hooks for observers
 │   │   └── exceptions.py       # Domain-specific exceptions
-│   └── models/
-│       ├── pm/                 # Population Models (discrete-time ODEs)
-│       ├── lio/                # Language of Interacting Objects
-│       └── nba/                # Network of Broadcasting Agents
+│   ├── models/
+│   │   ├── pm/                 # Population Models (Gillespie stochastic)
+│   │   ├── lio/                # Language of Interacting Objects
+│   │   ├── nba/                # Network of Broadcasting Agents
+│   │   └── yoda/               # Yet anOther agent Description lAnguage
+│   └── util/
+│       └── result_plotter.py   # ResultPlotter — Matplotlib visualisation
 └── tests/                      # Test suite mirroring the package structure
 ```
 
-## Available model modules
+## Available modules
+
+### Model modules
 
 | Module | Description |
 |---|---|
 | `pythia.models.pm` | Continuous-time stochastic population simulator (`PopulationModel`) driven by Gillespie-style reaction rules |
 | `pythia.models.lio` | Agent-based models using the Language of Interacting Objects calculus |
 | `pythia.models.nba` | Continuous-time agent-based models using the Network of Broadcasting Agents calculus |
+| `pythia.models.yoda` | Multi-agent simulation with layered data stores, typed actions, dynamics, observations, and a dual-clock scheduler (`YodaModel`) |
+
+### API utilities
+
+| Class | Description |
+|---|---|
+| `SimulationRunner` | Single-run lifecycle orchestration |
+| `Simulator` | Batch execution over *N* independent runs; results stored as `DataTable` per run |
+| `DataCollector` | Records measures at a shared mean frequency into a single `DataTable` |
+| `DataTable` | Immutable time-indexed float table with fixed column labels |
+| `DataTracer` | Collects per-object `DataTable` observations via a user-supplied trace function |
+| `Tracer` | Drives a single model run, feeding a `DataTracer` at every step |
+| `ReachabilityEstimator` | Monte Carlo estimator: probability and standard deviation of reaching a target state within a deadline |
+
+### Utility modules
+
+| Class | Description |
+|---|---|
+| `ResultPlotter` | Generates one Matplotlib figure per measure from a `list[DataTable]` (requires `pip install 'pythia[visualization]'`) |
 
 ## Quick start
 
-The example below runs a point-to-point communication system with the NBA
-module: ten *active* agents each send on channel `c` at rate 1, causing one
-*standby* agent to become active in return.
+### Running a simulation
 
 ```python
 from pythia.api import SimulationConfig, SimulationRunner
 from pythia.models.nba import AgentDefinitions, Channel, Environment, NBAModel
 
-# Define channel and agent types
 c = Channel("sync")
 defs = AgentDefinitions()
 active  = defs.get("active")
 standby = defs.get("standby")
 
-# Transitions: active --c!--> standby, standby --c?--> active
 defs.add_send_transition(active, c, standby, 1.0)
 defs.add_receive_transition(standby, c, active, 1.0)
 
-# Environment: send rate and receiver weight
 env = Environment()
 env.set_send_rate(active, c, 1.0)
 env.set_receive_weight(standby, c, 1.0)
 
-# Run
 model = NBAModel({active: 5, standby: 5}, defs, env)
 state = SimulationRunner(model, SimulationConfig(max_time=20.0, random_seed=42)).run()
 
 cfg = state.data["nba.configuration"]
 print(f"active:  {cfg.count(active)}")
 print(f"standby: {cfg.count(standby)}")
-print(f"elapsed: {state.elapsed_time:.3f}")
 ```
 
-## Custom models
+### Collecting measurements
 
-Any model that subclasses `BaseModel` and implements the three lifecycle
-methods plugs straight into the runner:
+```python
+from pythia.api import SimulationConfig, SimulationRunner
+from pythia.api.collector import DataCollector
+from pythia.api.measure import Measure
+
+collector = DataCollector([
+    Measure("active",  lambda s: float(s.data["nba.configuration"].count(active)),  frequency=1.0),
+    Measure("standby", lambda s: float(s.data["nba.configuration"].count(standby)), frequency=1.0),
+])
+
+runner = SimulationRunner(model, SimulationConfig(max_time=20.0, random_seed=42),
+                          data_collector=collector)
+runner.run()
+
+table = collector.records          # single DataTable with columns "active" and "standby"
+for t in table.times:
+    row = table.get(t)
+    print(f"t={t:.1f}  active={row['active']:.0f}  standby={row['standby']:.0f}")
+```
+
+### Estimating reachability
+
+```python
+from pythia.api import SimulationConfig
+from pythia.api.reachability import ReachabilityEstimator
+
+estimator = ReachabilityEstimator(model, SimulationConfig(max_time=20.0, random_seed=0))
+prob, std = estimator.estimate(
+    n_runs=500,
+    deadline=20.0,
+    final_predicate=lambda s: s.data["nba.configuration"].count(active) == 10,
+)
+print(f"P(all active within t=20) = {prob:.3f} ± {std:.3f}")
+```
+
+### Custom models
+
+Any model that subclasses `BaseModel` plugs straight into the runner:
 
 ```python
 import random
@@ -91,8 +151,7 @@ class RandomWalkModel(BaseModel):
         self._rng = random.Random(config.random_seed)
 
     def step(self, state: SimulationState) -> tuple[float, SimulationState]:
-        position = state.data.get("position", 0.0)
-        state.data["position"] = position + self._rng.choice([-1.0, 1.0])
+        state.data["position"] = state.data.get("position", 0.0) + self._rng.choice([-1.0, 1.0])
         return 1.0, state
 
     def finalize(self, state: SimulationState) -> None:
@@ -113,10 +172,10 @@ cd pythia
 pip install -e ".[dev]"
 ```
 
-To also install documentation dependencies:
+To also install documentation and visualisation dependencies:
 
 ```bash
-pip install -e ".[dev,docs]"
+pip install -e ".[dev,docs,visualization]"
 ```
 
 ## Running tests
