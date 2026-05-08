@@ -1,0 +1,125 @@
+site_name: Pythia
+site_description: A modular simulation framework in Python
+site_author: Pythia contributors
+docs_dir: docs
+site_dir: site
+
+repo_url: https://github.com/loreti/pythia
+repo_name: loreti/pythia
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            docstring_options:
+              ignore_init_summary: false
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            members_order: source
+            merge_init_into_class: true
+            separate_signature: true
+            signature_crossrefs: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - User Guide:
+    - Architecture: guide/architecture.md
+    - Writing a Model: guide/writing-a-model.md
+    - Observing Runs: guide/observing-runs.md
+  - API Reference:
+    - Overview: api/index.md
+    - SimulationConfig: api/config.md
+    - SimulationState: api/state.md
+    - BaseModel: api/model.md
+    - SimulationRunner: api/runner.md
+    - Events: api/events.md
+    - Exceptions: api/exceptions.md
+  - Models:
+    - Population Models (pm):
+      - Overview: models/pm/index.md
+      - Population: models/pm/population.md
+      - Species: models/pm/species.md
+      - CountingState: models/pm/counting_state.md
+      - Rule: models/pm/rule.md
+      - PopulationModel: models/pm/population_model.md
+    - Language of Interacting Objects (lio):
+      - Overview: models/lio/index.md
+      - Action: models/lio/action.md
+      - Agent: models/lio/agent.md
+      - AgentDefinitions: models/lio/agent_definitions.md
+      - ActionWeightFunction: models/lio/action_weight.md
+      - LIOState: models/lio/lio_state.md
+      - LIOStateOfIndividuals: models/lio/lio_state_of_individuals.md
+      - LIOStateOfCountingVector: models/lio/lio_state_of_counting_vector.md
+      - LioModel: models/lio/lio_model.md
+    - Network of Broadcasting Agents (nba):
+      - Overview: models/nba/index.md
+      - Channel: models/nba/channel.md
+      - Actions: models/nba/action.md
+      - Agent: models/nba/agent.md
+      - AgentDefinitions: models/nba/agent_definitions.md
+      - Environment: models/nba/environment.md
+      - NBAConfiguration: models/nba/nba_configuration.md
+      - NBAModel: models/nba/nba_model.md
+    - YODA (yoda):
+      - Overview: models/yoda/index.md
+      - Store: models/yoda/store.md
+      - AgentStore: models/yoda/agent_store.md
+      - Action: models/yoda/action.md
+      - Agent: models/yoda/agent.md
+      - AgentState: models/yoda/agent_state.md
+      - AgentConfiguration: models/yoda/agent_configuration.md
+      - AgentDefinitions: models/yoda/agent_definitions.md
+      - SystemConfiguration: models/yoda/system_configuration.md
+      - YodaModel: models/yoda/yoda_model.md
+  - Changelog: changelog.md
