@@ -18,14 +18,21 @@ Available classes:
 - :class:`~pythia.util.result_plotter.ResultPlotter` — generate one
   Matplotlib figure per measure from multi-run simulation data
   (requires ``pip install 'pythia[visualization]'``).
+- :class:`~pythia.util.data_statistics.DataStatistics` — compute mean,
+  standard deviation, quartiles, min and max across a list of
+  :class:`~pythia.api.data_table.DataTable` objects sharing the same labels
+  and time points (requires ``pip install 'pythia[visualization]'``).
 
 Import from the relevant submodule directly::
 
     from pythia.util.result_plotter import ResultPlotter
+    from pythia.util.data_statistics import DataStatistics
 """
 
+from pythia.util.data_statistics import DataStatistics
 from pythia.util.result_plotter import ResultPlotter
 
 __all__ = [
+    "DataStatistics",
     "ResultPlotter",
 ]

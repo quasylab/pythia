@@ -162,3 +162,104 @@ class TestPlot:
         figs = ResultPlotter(ONE_RUN).plot()
         assert len(figs) == 1
         assert figs[0].axes[0].get_title() == "speed"
+
+
+# ---------------------------------------------------------------------------
+# statistics property
+# ---------------------------------------------------------------------------
+
+class TestStatisticsProperty:
+    def test_returns_data_statistics(self) -> None:
+        from pythia.util.data_statistics import DataStatistics
+        assert isinstance(ResultPlotter(TWO_RUNS).statistics, DataStatistics)
+
+    def test_cached_on_second_access(self) -> None:
+        p = ResultPlotter(TWO_RUNS)
+        s1 = p.statistics
+        s2 = p.statistics
+        assert s1 is s2
+
+    def test_statistics_labels_match_measures(self) -> None:
+        p = ResultPlotter(TWO_RUNS)
+        assert set(p.statistics.labels) == p.measures
+
+
+# ---------------------------------------------------------------------------
+# plot_measure_statistics
+# ---------------------------------------------------------------------------
+
+class TestPlotMeasureStatistics:
+    def test_returns_figure(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert isinstance(fig, Figure)
+
+    def test_figure_has_one_axes(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert len(fig.axes) == 1
+
+    def test_title_is_measure_name(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert fig.axes[0].get_title() == "speed"
+
+    def test_xlabel_is_time(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert fig.axes[0].get_xlabel() == "time"
+
+    def test_ylabel_is_measure_name(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert fig.axes[0].get_ylabel() == "speed"
+
+    def test_mean_line_present(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        # exactly one Line2D for the mean
+        assert len(fig.axes[0].lines) == 1
+
+    def test_shaded_bands_present(self) -> None:
+        # Two fill_between calls produce two PolyCollection objects
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        from matplotlib.collections import PolyCollection
+        polys = [c for c in fig.axes[0].collections
+                 if isinstance(c, PolyCollection)]
+        assert len(polys) == 2
+
+    def test_legend_present(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert fig.axes[0].get_legend() is not None
+
+    def test_unknown_measure_raises(self) -> None:
+        with pytest.raises(KeyError):
+            ResultPlotter(TWO_RUNS).plot_measure_statistics("missing")
+
+    def test_mean_values_correct(self) -> None:
+        t1 = _table(["v"], {0.0: {"v": 2.0}, 1.0: {"v": 4.0}})
+        t2 = _table(["v"], {0.0: {"v": 4.0}, 1.0: {"v": 8.0}})
+        fig = ResultPlotter([t1, t2]).plot_measure_statistics("v")
+        y_data = list(fig.axes[0].lines[0].get_ydata())
+        assert y_data == pytest.approx([3.0, 6.0])
+
+    def test_times_from_statistics(self) -> None:
+        t1 = _table(["v"], {0.0: {"v": 1.0}, 1.0: {"v": 2.0}})
+        t2 = _table(["v"], {0.0: {"v": 3.0}, 1.0: {"v": 4.0}})
+        fig = ResultPlotter([t1, t2]).plot_measure_statistics("v")
+        x_data = list(fig.axes[0].lines[0].get_xdata())
+        assert x_data == pytest.approx([0.0, 1.0])
+
+
+# ---------------------------------------------------------------------------
+# plot_statistics
+# ---------------------------------------------------------------------------
+
+class TestPlotStatistics:
+    def test_returns_list_of_figures(self) -> None:
+        figs = ResultPlotter(TWO_RUNS).plot_statistics()
+        assert isinstance(figs, list)
+        assert all(isinstance(f, Figure) for f in figs)
+
+    def test_one_figure_per_measure(self) -> None:
+        figs = ResultPlotter(TWO_RUNS).plot_statistics()
+        assert len(figs) == len(ResultPlotter(TWO_RUNS).measures)
+
+    def test_figures_in_alphabetical_order(self) -> None:
+        figs = ResultPlotter(TWO_RUNS).plot_statistics()
+        titles = [f.axes[0].get_title() for f in figs]
+        assert titles == sorted(titles)

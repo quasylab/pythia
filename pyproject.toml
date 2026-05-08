@@ -42,11 +42,12 @@ docs = [
 models = []
 visualization = [
     "matplotlib>=3.8",
+    "numpy>=1.26",
 ]
 
 [project.urls]
-Repository = "https://github.com/loreti/pythia"
-Issues = "https://github.com/loreti/pythia/issues"
+Repository = "https://github.com/quasylab/pythia"
+Issues = "https://github.com/quasylab/pythia/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pythia"]
