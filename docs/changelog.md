@@ -5,6 +5,64 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.4.0] — 2026-05-08
+
+### Added
+
+#### `pythia.util` (new utility subpackage)
+
+- `DataTable` — immutable time-indexed float table with fixed column labels;
+  supports `add_row`, `get`, `times`, `__len__`, `__contains__`
+- `DataTracer` — collects per-object `DataTable` observations from a running
+  simulation via a user-supplied trace function; provides `trace`, `get_table`,
+  `names`, `tables`, and `times` methods
+- `Tracer` — drives a single model run, calling a `DataTracer` at the initial
+  state and after every step up to the deadline
+- `ReachabilityEstimator` — Monte Carlo estimator for first-passage
+  reachability probability; returns `(p, std)` where
+  `std = sqrt(p*(1-p)/n)`; supports an optional `transient_predicate`
+- `DataStatistics` — computes mean, sample std (ddof=1), Q1/Q2/Q3 quartiles,
+  min and max across a `list[DataTable]` with matching labels and times
+  using NumPy; each statistic is a dedicated `DataTable`
+- `ResultPlotter` — generates one Matplotlib figure per column label from a
+  `list[DataTable]`; raw-run view (`plot`, `plot_measure`) and statistical
+  summary view (`plot_statistics`, `plot_measure_statistics`) with mean line,
+  Q1–Q3 band, and min–max band
+- `Trajectory2D` — immutable time-ordered 2-D trajectory built from a
+  `DataTable` and a trace function `dict[str, float] -> (x, y, fmt)`; provides
+  `get`, `times`, `xs`, `ys`, `formats`, `min_step`, and `normalise`
+- `Trajectory2D.normalise(from_, to, dt)` — resamples onto a uniform `k*dt`
+  grid using a single O(n+m) forward pass; handles exact match, linear
+  interpolation, past-end zero-order hold, and before-start zero-order hold
+- `TraceViewer` — builds one `Trajectory2D` per named object in a
+  `DataTracer`, normalises each, and returns a
+  `matplotlib.animation.FuncAnimation`
+
+#### `pythia.api`
+
+- `DataTable` exported from `pythia.api`
+- `DataTracer` exported from `pythia.api`
+- `Tracer` exported from `pythia.api`
+- `ReachabilityEstimator` exported from `pythia.api`
+
+### Changed
+
+- `DataCollector` — all measures now share a single **mean frequency**
+  (arithmetic mean of individual measure frequencies); a single `DataTable`
+  with all measure names as column labels replaces the previous
+  per-measure `list[tuple[float, float]]` storage
+- `DataCollector.records` — now returns `DataTable | None` instead of
+  `Mapping[str, Sequence[tuple[float, float]]]`
+- `Simulator.results` — now `Sequence[DataTable | None]` (one per run)
+- `Simulator.results_for(name)` — now returns
+  `Sequence[list[tuple[float, float]]]` extracted from the shared table
+- `ResultPlotter` — constructor now accepts `list[DataTable]` instead of
+  `list[Mapping[str, Sequence[tuple[float, float]]]]`
+- `pyproject.toml` — `numpy>=1.26` added to the `visualization` extra
+  alongside `matplotlib>=3.8`
+
+---
+
 ## [0.3.0] — 2026-05-08
 
 ### Added
