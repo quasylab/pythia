@@ -50,14 +50,14 @@ class TestSimulatorRun:
 
     def test_each_run_has_expected_measure(self) -> None:
         sim = _make_sim(n_runs=3)
-        for run in sim.results:
-            assert "t" in run
+        for table in sim.results:
+            assert "t" in table.labels
 
     def test_each_run_has_correct_number_of_points(self) -> None:
         # NoOpModel: dt=1.0, max_time=5.0, frequency=1.0 → points 0..5 = 6
         sim = _make_sim(n_runs=3, max_time=5.0)
-        for run in sim.results:
-            assert len(run["t"]) == 6
+        for table in sim.results:
+            assert len(table) == 6
 
     def test_zero_n_runs_raises(self) -> None:
         sim = Simulator(NoOpModel(), SimulationConfig(max_time=5.0), [_time_measure()])
@@ -88,7 +88,9 @@ class TestResultsFor:
     def test_results_for_matches_results_property(self) -> None:
         sim = _make_sim(n_runs=3)
         for i, series in enumerate(sim.results_for("t")):
-            assert series == sim.results[i]["t"]
+            table = sim.results[i]
+            expected = [(t, table.get(t)["t"]) for t in table.times]
+            assert series == pytest.approx(expected)
 
 
 # ---------------------------------------------------------------------------
@@ -104,7 +106,9 @@ class TestSeedHandling:
         sim_b = Simulator(NoOpModel(), config, measures)
         sim_a.run(3)
         sim_b.run(3)
-        assert sim_a.results == sim_b.results
+        for ta, tb in zip(sim_a.results, sim_b.results):
+            assert ta.times == tb.times
+            assert [ta.get(t)["t"] for t in ta.times] == [tb.get(t)["t"] for t in tb.times]
 
     def test_different_seeds_per_run(self) -> None:
         """Each run should receive a distinct seed (verified via a stochastic model)."""
@@ -137,7 +141,10 @@ class TestSeedHandling:
         sim.run(5)
 
         # With different seeds the final wolf counts should differ across some runs
-        final_values = [run["wolves"][-1][1] for run in sim.results]
+        final_values = [
+            table.get(table.times[-1])["wolves"]
+            for table in sim.results
+        ]
         assert len(set(final_values)) > 1  # not all identical
 
     def test_none_seed_does_not_raise(self) -> None:
@@ -174,5 +181,5 @@ class TestMultipleMeasures:
         m2 = Measure("step", lambda s: float(s.step), frequency=2.0)
         sim = Simulator(NoOpModel(), SimulationConfig(max_time=4.0, random_seed=0), [m1, m2])
         sim.run(3)
-        for run in sim.results:
-            assert "t" in run and "step" in run
+        for table in sim.results:
+            assert "t" in table.labels and "step" in table.labels

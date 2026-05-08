@@ -40,7 +40,9 @@ docs = [
 ]
 # Placeholder extras for future modules.
 models = []
-visualization = []
+visualization = [
+    "matplotlib>=3.8",
+]
 
 [project.urls]
 Repository = "https://github.com/loreti/pythia"

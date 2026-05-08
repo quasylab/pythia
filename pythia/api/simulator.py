@@ -26,10 +26,11 @@ Example::
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Iterable, Sequence
 
 from pythia.api.collector import DataCollector
 from pythia.api.config import SimulationConfig
+from pythia.api.data_table import DataTable
 from pythia.api.measure import Measure
 from pythia.api.model import BaseModel
 from pythia.api.runner import SimulationRunner
@@ -76,7 +77,7 @@ class Simulator:
         self._model = model
         self._config = config
         self._measures: tuple[Measure, ...] = tuple(measures)
-        self._results: list[Mapping[str, Sequence[tuple[float, float]]]] = []
+        self._results: list[DataTable | None] = []
 
     # ------------------------------------------------------------------
     # Public interface
@@ -106,31 +107,37 @@ class Simulator:
             self._results.append(collector.records)
 
     @property
-    def results(self) -> Sequence[Mapping[str, Sequence[tuple[float, float]]]]:
-        """All collected records, one entry per run.
+    def results(self) -> Sequence[DataTable | None]:
+        """All collected records, one :class:`~pythia.api.data_table.DataTable`
+        per run (or ``None`` when no measures are registered).
 
-        Each element is the :attr:`~pythia.api.collector.DataCollector.records`
-        mapping of that run: a ``{measure_name: [(time, value), ...]}``
-        dictionary.  Returns an empty list if :meth:`run` has not been called.
+        Each table has one column per measure and one row per scheduled sample
+        point.  Returns an empty list if :meth:`run` has not been called.
         """
         return list(self._results)
 
-    def results_for(self, name: str) -> Sequence[Sequence[tuple[float, float]]]:
-        """Return the time-series records for a single measure across all runs.
+    def results_for(self, name: str) -> Sequence[list[tuple[float, float]]]:
+        """Return the ``(time, value)`` pairs for *name* across all runs.
 
         Args:
             name: The :attr:`~pythia.api.measure.Measure.name` of the measure.
 
         Returns:
-            A list of ``[(time, value), ...]`` sequences, one per run, in the
-            order the runs were executed.
+            A list of ``[(time, value), ...]`` lists, one per run.
 
         Raises:
             KeyError: If *name* does not match any registered measure.
         """
-        if self._results and name not in self._results[0]:
+        measure_names = {m.name for m in self._measures}
+        if name not in measure_names:
             raise KeyError(f"No measure named {name!r}")
-        return [run[name] for run in self._results]
+        result = []
+        for table in self._results:
+            if table is None:
+                result.append([])
+            else:
+                result.append([(t, table.get(t)[name]) for t in table.times])
+        return result
 
     # ------------------------------------------------------------------
     # Internal helpers
