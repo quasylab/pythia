@@ -22,17 +22,30 @@ Available classes:
   standard deviation, quartiles, min and max across a list of
   :class:`~pythia.api.data_table.DataTable` objects sharing the same labels
   and time points (requires ``pip install 'pythia[visualization]'``).
+- :class:`~pythia.util.trajectory_2d.Trajectory2D` — time-ordered 2-D
+  trajectory built from a :class:`~pythia.api.data_table.DataTable` and a
+  trace function.
+- :class:`~pythia.util.trace_viewer.TraceViewer` — animated 2-D visualisation
+  of all objects in a :class:`~pythia.api.data_tracer.DataTracer` using
+  Matplotlib :class:`~matplotlib.animation.FuncAnimation`
+  (requires ``pip install 'pythia[visualization]'``).
 
 Import from the relevant submodule directly::
 
     from pythia.util.result_plotter import ResultPlotter
     from pythia.util.data_statistics import DataStatistics
+    from pythia.util.trajectory_2d import Trajectory2D
+    from pythia.util.trace_viewer import TraceViewer
 """
 
 from pythia.util.data_statistics import DataStatistics
 from pythia.util.result_plotter import ResultPlotter
+from pythia.util.trace_viewer import TraceViewer
+from pythia.util.trajectory_2d import Trajectory2D
 
 __all__ = [
     "DataStatistics",
     "ResultPlotter",
+    "TraceViewer",
+    "Trajectory2D",
 ]
