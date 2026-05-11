@@ -5,6 +5,26 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.5.0] — 2026-05-09
+
+### Added
+
+- `ReachabilityEstimator.estimate_over_time(n_runs, deadline, dt,
+  final_predicate, transient_predicate)` — estimates reachability probability
+  at every time bucket `i·dt` (for `i = 1 … k`, where `k = ⌈deadline/dt⌉`);
+  returns a tuple of `k` pairs `(probability, std_dev)`.  A counter per bucket
+  is incremented when a run's first passage time falls within that bucket,
+  giving non-decreasing probabilities.  The last element always equals
+  `estimate()` at the full deadline with the same seed.
+
+### Changed
+
+- `ResultPlotter.plot_measure` and `ResultPlotter.plot_measure_statistics` now
+  call `plt.show()` before returning, so figures are displayed immediately when
+  any plotting method is invoked.
+
+---
+
 ## [0.4.0] — 2026-05-08
 
 ### Added

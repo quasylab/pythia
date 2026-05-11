@@ -125,8 +125,8 @@ class ResultPlotter:
         """Generate one raw-run figure per measure.
 
         Each figure contains one labelled line per run.  Figures are returned
-        in alphabetical order of measure name and are *not* shown
-        automatically.
+        in alphabetical order of measure name.  Each figure is displayed
+        immediately via :func:`matplotlib.pyplot.show`.
 
         Returns:
             A list of :class:`matplotlib.figure.Figure` objects, one per
@@ -184,6 +184,7 @@ class ResultPlotter:
         if n_runs > 1:
             ax.legend()
 
+        plt.show()
         return fig
 
     # ------------------------------------------------------------------
@@ -196,7 +197,8 @@ class ResultPlotter:
         Each figure shows the **mean** as a solid line, the interquartile
         range (Q1–Q3) as a shaded band, and the full min–max range as a
         lighter shaded band.  Figures are returned in alphabetical order of
-        measure name and are *not* shown automatically.
+        measure name.  Each figure is displayed immediately via
+        :func:`matplotlib.pyplot.show`.
 
         All tables must share the same labels and time points so that
         :attr:`statistics` can be computed.
@@ -268,4 +270,5 @@ class ResultPlotter:
         ax.set_ylabel(measure)
         ax.legend()
 
+        plt.show()
         return fig
