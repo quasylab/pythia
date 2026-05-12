@@ -5,6 +5,23 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.7.0] — 2026-05-12
+
+### Added
+
+- `examples/lio/threestate.py` — Three State distributed probabilistic
+  consensus protocol implemented with `models.lio`: agents hold one of three
+  beliefs (`B0`, `B1`, `DUB`) and update them by observing neighbours;
+  demonstrates `LIOStateOfCountingVector`, `ActionWeightFunction`, and
+  `LioModel` with a `DataCollector`
+
+### Fixed
+
+- `pythia/models/lio/lio_state_of_counting_vector.py` — minor formatting fix
+  (leading blank line added by linter)
+
+---
+
 ## [0.6.0] — 2026-05-12
 
 ### Added

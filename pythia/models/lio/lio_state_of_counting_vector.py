@@ -1,3 +1,4 @@
+
 """LIOStateOfCountingVector — a compact LIO state stored as agent→count pairs.
 
 Rather than keeping one entry per individual, a
