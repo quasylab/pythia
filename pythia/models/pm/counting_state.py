@@ -87,6 +87,7 @@ class CountingState:
 
         self._counting_vector: dict[int, int] = vector
         self._counting_vector_proxy: Mapping[int, int] = types.MappingProxyType(vector)
+        self._size: int = sum(vector.values())
 
     # ------------------------------------------------------------------
     # Internal factory
@@ -112,6 +113,7 @@ class CountingState:
         filtered = {k: v for k, v in vector.items() if v > 0}
         instance._counting_vector = filtered
         instance._counting_vector_proxy = types.MappingProxyType(filtered)
+        instance._size = sum(filtered.values())
         return instance
 
     # ------------------------------------------------------------------
@@ -130,6 +132,49 @@ class CountingState:
             internal count dictionary.
         """
         return self._counting_vector_proxy
+
+    @property
+    def size(self) -> int:
+        """Total number of items across all species in this state.
+
+        Computed once at construction (and propagated through :meth:`add`
+        and :meth:`remove`) so the value is available in O(1).
+
+        Example:
+            >>> from pythia.models.pm.population import Population
+            >>> pop = Population()
+            >>> wolf   = pop.register("wolf")
+            >>> rabbit = pop.register("rabbit")
+            >>> CountingState({wolf: 3, rabbit: 7}).size
+            10
+            >>> CountingState({}).size
+            0
+        """
+        return self._size
+
+    def count(self, species: Species) -> int:
+        """Return the number of elements of *species* in this state.
+
+        Args:
+            species: The :class:`~pythia.models.pm.species.Species` to look up.
+
+        Returns:
+            The non-negative integer count; ``0`` if *species* is absent.
+
+        Example:
+            >>> from pythia.models.pm.population import Population
+            >>> pop = Population()
+            >>> wolf   = pop.register("wolf")
+            >>> rabbit = pop.register("rabbit")
+            >>> state = CountingState({wolf: 7, rabbit: 3})
+            >>> state.count(wolf)
+            7
+            >>> state.count(rabbit)
+            3
+            >>> state.count(pop.register("bear"))
+            0
+        """
+        return self._counting_vector.get(species.index, 0)
 
     def contains(self, other: CountingState) -> bool:
         """Return ``True`` if this state has at least as many elements as *other* for every species.

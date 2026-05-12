@@ -191,13 +191,23 @@ class PopulationModel(BaseModel):
             else _random.Random(config.random_seed)
         )
 
+    def setup(self, state: SimulationState) -> None:
+        """Write the initial counting state into ``state.data``.
+
+        Sets ``state.data["pm.counting_state"]`` so that measures collected
+        at ``t = 0`` reflect the true starting population.
+
+        Args:
+            state: The simulation state at ``elapsed_time = 0``.
+        """
+        state.data["pm.counting_state"] = CountingState(dict(self._initial_state))
+
     def step(self, state: SimulationState) -> tuple[float, SimulationState]:
         """Advance the population by one Gillespie step.
 
-        On the first call, the current
-        :class:`~pythia.models.pm.counting_state.CountingState` is
-        initialised from :attr:`initial_state` and stored in
-        ``state.data["pm.counting_state"]``.
+        The current :class:`~pythia.models.pm.counting_state.CountingState`
+        is read from ``state.data["pm.counting_state"]`` (pre-populated by
+        :meth:`setup`).
 
         Subsequent calls read the current state from that key, evaluate all
         rules, and — if at least one is enabled — select one with probability

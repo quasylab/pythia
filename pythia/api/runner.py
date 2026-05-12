@@ -151,6 +151,7 @@ class SimulationRunner:
 
         try:
             self.model.initialize(self.config)
+            self.model.setup(state)
         except Exception as exc:
             self._fail(exc, state)
 

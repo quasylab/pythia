@@ -123,13 +123,23 @@ class LioModel(BaseModel):
         self.validate_config(config)
         self._rng = random.Random(config.random_seed)
 
+    def setup(self, state: SimulationState) -> None:
+        """Write the initial LIO configuration into ``state.data``.
+
+        Sets ``state.data["lio.configuration"]`` so that measures collected
+        at ``t = 0`` reflect the true starting configuration.
+
+        Args:
+            state: The simulation state at ``elapsed_time = 0``.
+        """
+        state.data["lio.configuration"] = self._initial_configuration
+
     def step(self, state: SimulationState) -> tuple[float, SimulationState]:
         """Advance the configuration by one step.
 
-        Reads the current configuration from ``state.data["lio.configuration"]``,
-        falling back to *initial_configuration* on the first call.  Replaces
-        the value with the next state produced by
-        ``conf.step(rng, action_weights.get(conf), agent_definitions)``.
+        Reads the current configuration from ``state.data["lio.configuration"]``
+        (pre-populated by :meth:`setup`) and replaces it with the next state
+        produced by ``conf.step(rng, action_weights.get(conf), agent_definitions)``.
 
         Args:
             state: The current simulation state.

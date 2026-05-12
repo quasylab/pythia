@@ -55,6 +55,22 @@ class BaseModel(abc.ABC):
         short and unique within a project (e.g. ``"sir"``, ``"lorenz"``).
         """
 
+    def setup(self, state: SimulationState) -> None:
+        """Populate the initial simulation state before the first measure collection.
+
+        Called by the runner after :meth:`initialize` and before measures are
+        collected at ``t = 0``.  Override this method to write the model's
+        starting data into ``state.data`` so that observers and data collectors
+        see the correct initial values at time zero.
+
+        The default implementation is a no-op; subclasses should override it
+        when they need measures at ``t = 0`` to reflect the true initial state.
+
+        Args:
+            state: The empty :class:`~pythia.api.state.SimulationState` at
+                ``elapsed_time = 0``.
+        """
+
     @abc.abstractmethod
     def initialize(self, config: SimulationConfig) -> None:
         """Prepare the model for a new run.

@@ -39,4 +39,4 @@ Thumbs.db
 .claude
 
 site
-seir.png
+examples/*/*.png

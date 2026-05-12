@@ -121,11 +121,22 @@ class NBAModel(BaseModel):
         self.validate_config(config)
         self._rng = random.Random(config.random_seed)
 
+    def setup(self, state: SimulationState) -> None:
+        """Write the initial NBA configuration into ``state.data``.
+
+        Sets ``state.data["nba.configuration"]`` so that measures collected
+        at ``t = 0`` reflect the true starting population.
+
+        Args:
+            state: The simulation state at ``elapsed_time = 0``.
+        """
+        state.data["nba.configuration"] = self._initial_cfg
+
     def step(self, state: SimulationState) -> tuple[float, SimulationState]:
         """Advance the configuration by one step.
 
-        Reads the current configuration from ``state.data["nba.configuration"]``,
-        falling back to the initial configuration on the first call.  Calls
+        Reads the current configuration from ``state.data["nba.configuration"]``
+        (pre-populated by :meth:`setup`).  Calls
         :meth:`~pythia.models.nba.nba_configuration.NBAConfiguration.step`;
         if it returns ``None`` (no enabled transition) the step duration is
         ``0.0`` and the configuration is left unchanged, signalling the runner

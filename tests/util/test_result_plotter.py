@@ -135,6 +135,24 @@ class TestPlotMeasure:
         y_data = list(fig.axes[0].lines[0].get_ydata())
         assert y_data == pytest.approx([5.0, 10.0])
 
+    def test_legend_hidden_by_default(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure("speed")
+        assert fig.axes[0].get_legend() is None
+
+    def test_legend_shown_when_requested(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure("speed", show_legend=True)
+        assert fig.axes[0].get_legend() is not None
+
+    def test_output_file_saves_figure(self, tmp_path) -> None:
+        out = tmp_path / "speed.png"
+        ResultPlotter(ONE_RUN).plot_measure("speed", output_file=out)
+        assert out.exists()
+
+    def test_no_output_file_by_default(self, tmp_path) -> None:
+        ResultPlotter(ONE_RUN).plot_measure("speed")
+        # nothing written to tmp_path
+        assert list(tmp_path.iterdir()) == []
+
 
 # ---------------------------------------------------------------------------
 # plot
@@ -162,6 +180,26 @@ class TestPlot:
         figs = ResultPlotter(ONE_RUN).plot()
         assert len(figs) == 1
         assert figs[0].axes[0].get_title() == "speed"
+
+    def test_output_folder_saves_files(self, tmp_path) -> None:
+        ResultPlotter(ONE_RUN).plot(output_folder=tmp_path)
+        assert (tmp_path / "speed.png").exists()
+
+    def test_prefix_applied_to_filename(self, tmp_path) -> None:
+        ResultPlotter(ONE_RUN).plot(output_folder=tmp_path, prefix="run_")
+        assert (tmp_path / "run_speed.png").exists()
+
+    def test_custom_extension(self, tmp_path) -> None:
+        ResultPlotter(ONE_RUN).plot(output_folder=tmp_path, extension="svg")
+        assert (tmp_path / "speed.svg").exists()
+
+    def test_no_files_when_folder_is_none(self, tmp_path) -> None:
+        ResultPlotter(ONE_RUN).plot()
+        assert list(tmp_path.iterdir()) == []
+
+    def test_legend_forwarded_to_each_figure(self) -> None:
+        figs = ResultPlotter(TWO_RUNS).plot(show_legend=True)
+        assert all(f.axes[0].get_legend() is not None for f in figs)
 
 
 # ---------------------------------------------------------------------------
@@ -222,9 +260,22 @@ class TestPlotMeasureStatistics:
                  if isinstance(c, PolyCollection)]
         assert len(polys) == 2
 
-    def test_legend_present(self) -> None:
+    def test_legend_hidden_by_default(self) -> None:
         fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert fig.axes[0].get_legend() is None
+
+    def test_legend_shown_when_requested(self) -> None:
+        fig = ResultPlotter(TWO_RUNS).plot_measure_statistics("speed", show_legend=True)
         assert fig.axes[0].get_legend() is not None
+
+    def test_output_file_saves_figure(self, tmp_path) -> None:
+        out = tmp_path / "speed_stats.png"
+        ResultPlotter(TWO_RUNS).plot_measure_statistics("speed", output_file=out)
+        assert out.exists()
+
+    def test_no_output_file_by_default(self, tmp_path) -> None:
+        ResultPlotter(TWO_RUNS).plot_measure_statistics("speed")
+        assert list(tmp_path.iterdir()) == []
 
     def test_unknown_measure_raises(self) -> None:
         with pytest.raises(KeyError):
@@ -263,3 +314,22 @@ class TestPlotStatistics:
         figs = ResultPlotter(TWO_RUNS).plot_statistics()
         titles = [f.axes[0].get_title() for f in figs]
         assert titles == sorted(titles)
+
+    def test_output_folder_saves_files(self, tmp_path) -> None:
+        ResultPlotter(TWO_RUNS).plot_statistics(output_folder=tmp_path)
+        for m in ResultPlotter(TWO_RUNS).measures:
+            assert (tmp_path / f"{m}.png").exists()
+
+    def test_prefix_applied_to_filename(self, tmp_path) -> None:
+        ResultPlotter(TWO_RUNS).plot_statistics(output_folder=tmp_path, prefix="stat_")
+        for m in ResultPlotter(TWO_RUNS).measures:
+            assert (tmp_path / f"stat_{m}.png").exists()
+
+    def test_custom_extension(self, tmp_path) -> None:
+        ResultPlotter(TWO_RUNS).plot_statistics(output_folder=tmp_path, extension="svg")
+        for m in ResultPlotter(TWO_RUNS).measures:
+            assert (tmp_path / f"{m}.svg").exists()
+
+    def test_legend_forwarded_to_each_figure(self) -> None:
+        figs = ResultPlotter(TWO_RUNS).plot_statistics(show_legend=True)
+        assert all(f.axes[0].get_legend() is not None for f in figs)

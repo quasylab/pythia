@@ -119,12 +119,32 @@ class YodaModel(BaseModel):
             "yoda.agents_simulation_step", self._agents_simulation_step
         )
 
+    def setup(self, state: SimulationState) -> None:
+        """Write the initial YODA configuration into ``state.data``.
+
+        Generates the initial :class:`~pythia.models.yoda.configuration.SystemConfiguration`
+        using :attr:`initial_state_generator` and stores it together with the
+        first scheduled times for environment and agent-action steps, so that
+        measures collected at ``t = 0`` reflect the true starting state.
+
+        Args:
+            state: The simulation state at ``elapsed_time = 0``.
+        """
+        state.data["yoda.configuration"] = self._initial_state_generator(self._rng)
+        state.data["yoda.time_of_next_environment_step"] = (
+            state.elapsed_time + self._environment_simulation_step
+        )
+        state.data["yoda.time_of_next_agents_step"] = (
+            state.elapsed_time + self._agents_simulation_step
+        )
+
     def step(self, state: SimulationState) -> tuple[float, SimulationState]:
         """Advance the system by one scheduled event.
 
         Selects the next pending event (environment step or agent-action step)
-        based on their scheduled times, executes it, updates the simulation
-        state, and returns the elapsed duration.
+        based on their scheduled times (pre-populated by :meth:`setup`),
+        executes it, updates the simulation state, and returns the elapsed
+        duration.
 
         Args:
             state: The current simulation state.

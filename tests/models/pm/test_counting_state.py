@@ -69,6 +69,63 @@ class TestCountingStateValidation:
 
 
 # ---------------------------------------------------------------------------
+# count
+# ---------------------------------------------------------------------------
+
+class TestSize:
+    def test_empty_state_is_zero(self) -> None:
+        assert CountingState({}).size == 0
+
+    def test_single_species(self, pop: Population) -> None:
+        assert CountingState({pop[0]: 5}).size == 5
+
+    def test_multiple_species(self, pop: Population) -> None:
+        assert CountingState({pop[0]: 3, pop[1]: 7}).size == 10
+
+    def test_zero_counts_excluded(self, pop: Population) -> None:
+        assert CountingState({pop[0]: 0, pop[1]: 4}).size == 4
+
+    def test_size_after_add(self, pop: Population) -> None:
+        a = CountingState({pop[0]: 3})
+        b = CountingState({pop[1]: 5})
+        assert a.add(b).size == 8
+
+    def test_size_after_remove(self, pop: Population) -> None:
+        a = CountingState({pop[0]: 10, pop[1]: 5})
+        b = CountingState({pop[0]: 3})
+        assert a.remove(b).size == 12
+
+    def test_returns_int(self, pop: Population) -> None:
+        assert isinstance(CountingState({pop[0]: 2}).size, int)
+
+
+class TestCount:
+    def test_present_species(self, pop: Population) -> None:
+        state = CountingState({pop[0]: 7, pop[1]: 3})
+        assert state.count(pop[0]) == 7
+
+    def test_another_present_species(self, pop: Population) -> None:
+        state = CountingState({pop[0]: 7, pop[1]: 3})
+        assert state.count(pop[1]) == 3
+
+    def test_absent_species_returns_zero(self, pop: Population) -> None:
+        state = CountingState({pop[0]: 5})
+        assert state.count(pop[1]) == 0
+
+    def test_empty_state_returns_zero(self, pop: Population) -> None:
+        assert CountingState({}).count(pop[0]) == 0
+
+    def test_returns_int(self, pop: Population) -> None:
+        state = CountingState({pop[0]: 4})
+        assert isinstance(state.count(pop[0]), int)
+
+    def test_zero_stored_count_returns_zero(self, pop: Population) -> None:
+        # CountingState drops zero counts at construction; verify count() returns 0
+        state = CountingState({pop[0]: 0, pop[1]: 2})
+        assert state.count(pop[0]) == 0
+
+
+# ---------------------------------------------------------------------------
 # counting_vector is immutable
 # ---------------------------------------------------------------------------
 

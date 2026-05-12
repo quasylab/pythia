@@ -5,6 +5,42 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.6.0] — 2026-05-12
+
+### Added
+
+- `CountingState.size` property — total number of items across all species,
+  computed once at construction and propagated through `add` / `remove` in O(1)
+- `CountingState.count(species)` — number of items of a given species (0 if
+  absent)
+- `BaseModel.setup(state)` — new non-abstract lifecycle hook called by the
+  runner after `initialize` and before the t=0 measure collection; the default
+  implementation is a no-op; models override it to pre-populate `state.data`
+  with the true initial state so that collectors see correct values at time zero
+
+### Changed
+
+- `SimulationRunner.run` — now calls `model.setup(state)` between `initialize`
+  and the initial `data_collector.collect(state)` call, fixing incorrect t=0
+  measurements in all built-in models
+- `PopulationModel`, `LioModel`, `NBAModel`, `YodaModel` — each now overrides
+  `setup` to write its initial configuration into `state.data` (e.g.
+  `"pm.counting_state"`, `"lio.configuration"`, `"nba.configuration"`,
+  `"yoda.configuration"`) so that measures at t=0 reflect the true starting
+  state
+- `ResultPlotter.plot_measure(measure, output_file=None, show_legend=False)` —
+  added `output_file` parameter to save the figure to disk, and `show_legend`
+  to control legend visibility (replaces the previous automatic legend logic)
+- `ResultPlotter.plot_measure_statistics(measure, output_file=None, show_legend=False)` —
+  same new parameters
+- `ResultPlotter.plot(output_folder=None, prefix="", extension="png", show_legend=False)` —
+  when `output_folder` is set, saves each figure as
+  `<folder>/<prefix><measure>.<extension>`; passes `show_legend` to each call
+- `ResultPlotter.plot_statistics(output_folder=None, prefix="", extension="png", show_legend=False)` —
+  same new parameters
+
+---
+
 ## [0.5.0] — 2026-05-09
 
 ### Added

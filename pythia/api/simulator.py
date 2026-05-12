@@ -77,7 +77,7 @@ class Simulator:
         self._model = model
         self._config = config
         self._measures: tuple[Measure, ...] = tuple(measures)
-        self._results: list[DataTable | None] = []
+        self._results: list[DataTable] = []
 
     # ------------------------------------------------------------------
     # Public interface
@@ -104,10 +104,12 @@ class Simulator:
             collector = DataCollector(self._measures)
             runner = SimulationRunner(self._model, run_config, data_collector=collector)
             runner.run()
-            self._results.append(collector.records)
+            simulation_result = collector.records
+            if simulation_result is not None:
+                self._results.append(simulation_result)
 
     @property
-    def results(self) -> Sequence[DataTable | None]:
+    def results(self) -> list[DataTable]:
         """All collected records, one :class:`~pythia.api.data_table.DataTable`
         per run (or ``None`` when no measures are registered).
 

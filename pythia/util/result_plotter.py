@@ -23,6 +23,7 @@ Requires the ``matplotlib`` and ``numpy`` packages
 
 Example::
 
+    from pathlib import Path
     from pythia.api.data_table import DataTable
     from pythia.util.result_plotter import ResultPlotter
 
@@ -35,11 +36,15 @@ Example::
     run2.add_row(1.0, {"population": 108.0})
 
     plotter = ResultPlotter([run1, run2])
-    figs  = plotter.plot()                    # raw lines
-    sfigs = plotter.plot_statistics()         # mean + IQR + min/max bands
+    # raw lines — save to out/pop_population.png, with legend
+    figs  = plotter.plot(output_folder="out", prefix="pop_", show_legend=True)
+    # statistical summary — saved to the same folder
+    sfigs = plotter.plot_statistics(output_folder="out", prefix="pop_")
 """
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from pythia.api.data_table import DataTable
 
@@ -121,12 +126,27 @@ class ResultPlotter:
     # Raw-run plotting
     # ------------------------------------------------------------------
 
-    def plot(self) -> list[Figure]:
+    def plot(
+        self,
+        output_folder: str | Path | None = None,
+        prefix: str = "",
+        extension: str = "png",
+        show_legend: bool = False,
+    ) -> list[Figure]:
         """Generate one raw-run figure per measure.
 
-        Each figure contains one labelled line per run.  Figures are returned
-        in alphabetical order of measure name.  Each figure is displayed
-        immediately via :func:`matplotlib.pyplot.show`.
+        Each figure contains one labelled line per run and is returned in
+        alphabetical order of measure name.
+
+        Args:
+            output_folder: Directory where figures are saved.  When ``None``
+                (default) no files are written.
+            prefix: String prepended to the measure name when building the
+                filename (default ``""``).
+            extension: File extension / format for saved figures
+                (default ``"png"``).
+            show_legend: When ``True`` a legend is added to each figure
+                (default ``False``).
 
         Returns:
             A list of :class:`matplotlib.figure.Figure` objects, one per
@@ -141,13 +161,30 @@ class ResultPlotter:
             >>> len(figs)
             1
         """
-        return [self.plot_measure(m) for m in sorted(self.measures)]
+        figs = []
+        for m in sorted(self.measures):
+            out = (
+                Path(output_folder) / f"{prefix}{m}.{extension}"
+                if output_folder is not None
+                else None
+            )
+            figs.append(self.plot_measure(m, output_file=out, show_legend=show_legend))
+        return figs
 
-    def plot_measure(self, measure: str) -> Figure:
+    def plot_measure(
+        self,
+        measure: str,
+        output_file: str | Path | None = None,
+        show_legend: bool = False,
+    ) -> Figure:
         """Generate a raw-run figure for a single *measure*.
 
         Args:
             measure: The column label to plot.
+            output_file: Path to save the figure.  When ``None`` (default)
+                the figure is not saved to disk.
+            show_legend: When ``True`` a legend is added to the figure
+                (default ``False``).
 
         Returns:
             A :class:`matplotlib.figure.Figure` with one line per run.
@@ -181,27 +218,42 @@ class ResultPlotter:
         ax.set_title(measure)
         ax.set_xlabel("time")
         ax.set_ylabel(measure)
-        if n_runs > 1:
+
+        if show_legend:
             ax.legend()
 
-        plt.show()
+        if output_file is not None:
+            fig.savefig(output_file, bbox_inches="tight")
+
         return fig
 
     # ------------------------------------------------------------------
     # Statistical plotting
     # ------------------------------------------------------------------
 
-    def plot_statistics(self) -> list[Figure]:
+    def plot_statistics(
+        self,
+        output_folder: str | Path | None = None,
+        prefix: str = "",
+        extension: str = "png",
+        show_legend: bool = False,
+    ) -> list[Figure]:
         """Generate one statistical-summary figure per measure.
 
         Each figure shows the **mean** as a solid line, the interquartile
         range (Q1–Q3) as a shaded band, and the full min–max range as a
-        lighter shaded band.  Figures are returned in alphabetical order of
-        measure name.  Each figure is displayed immediately via
-        :func:`matplotlib.pyplot.show`.
+        lighter shaded band.  All tables must share the same labels and time
+        points so that :attr:`statistics` can be computed.
 
-        All tables must share the same labels and time points so that
-        :attr:`statistics` can be computed.
+        Args:
+            output_folder: Directory where figures are saved.  When ``None``
+                (default) no files are written.
+            prefix: String prepended to the measure name when building the
+                filename (default ``""``).
+            extension: File extension / format for saved figures
+                (default ``"png"``).
+            show_legend: When ``True`` a legend is added to each figure
+                (default ``False``).
 
         Returns:
             A list of :class:`matplotlib.figure.Figure` objects, one per
@@ -215,9 +267,24 @@ class ResultPlotter:
             >>> len(figs)
             1
         """
-        return [self.plot_measure_statistics(m) for m in sorted(self.measures)]
+        figs = []
+        for m in sorted(self.measures):
+            out = (
+                Path(output_folder) / f"{prefix}{m}.{extension}"
+                if output_folder is not None
+                else None
+            )
+            figs.append(
+                self.plot_measure_statistics(m, output_file=out, show_legend=show_legend)
+            )
+        return figs
 
-    def plot_measure_statistics(self, measure: str) -> Figure:
+    def plot_measure_statistics(
+        self,
+        measure: str,
+        output_file: str | Path | None = None,
+        show_legend: bool = False,
+    ) -> Figure:
         """Generate a statistical-summary figure for a single *measure*.
 
         The figure contains:
@@ -230,6 +297,10 @@ class ResultPlotter:
 
         Args:
             measure: The column label to plot.
+            output_file: Path to save the figure.  When ``None`` (default)
+                the figure is not saved to disk.
+            show_legend: When ``True`` a legend is added to the figure
+                (default ``False``).
 
         Returns:
             A :class:`matplotlib.figure.Figure` summarising the distribution
@@ -268,7 +339,11 @@ class ResultPlotter:
         ax.set_title(measure)
         ax.set_xlabel("time")
         ax.set_ylabel(measure)
-        ax.legend()
 
-        plt.show()
+        if show_legend:
+            ax.legend()
+
+        if output_file is not None:
+            fig.savefig(output_file, bbox_inches="tight")
+
         return fig
