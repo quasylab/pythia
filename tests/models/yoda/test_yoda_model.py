@@ -192,7 +192,7 @@ class TestStepBothTogether:
         from pythia.models.yoda.action import Action
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         m = YodaModel(
             initial_state_generator=lambda rng: _conf((A, IDLE)),
@@ -224,7 +224,7 @@ class TestStepAgentFirst:
         from pythia.models.yoda.action import Action
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         m = YodaModel(
             initial_state_generator=lambda rng: _conf((A, IDLE)),

@@ -39,7 +39,7 @@ Example::
     tick = Action("tick", step_function=lambda rng, s, o: s)
 
     defs = AgentDefinitions()
-    defs.add_transition(a, idle, tick, 1.0, busy)
+    defs.add_transition(a, idle, tick, busy, 1.0)
     defs.set_default_action_weight(tick, lambda s: 1.0)
 
     def initial(rng: random.Random) -> SystemConfiguration:

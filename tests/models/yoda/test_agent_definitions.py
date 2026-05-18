@@ -57,56 +57,56 @@ class TestConstruction:
 class TestAddTransition:
     def test_single_transition_stored(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         assert defs.agents[A][IDLE][TICK] == [(1.0, BUSY)]
 
     def test_multiple_outcomes_same_key(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, IDLE, TICK, 2.0, DONE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, IDLE, TICK, DONE, 2.0)
         assert defs.agents[A][IDLE][TICK] == [(1.0, BUSY), (2.0, DONE)]
 
     def test_multiple_actions_same_source(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, IDLE, STEP, 3.0, DONE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, IDLE, STEP, DONE, 3.0)
         assert defs.agents[A][IDLE][TICK] == [(1.0, BUSY)]
         assert defs.agents[A][IDLE][STEP] == [(3.0, DONE)]
 
     def test_multiple_source_states(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, BUSY, TICK, 1.0, IDLE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, BUSY, TICK, IDLE, 1.0)
         assert defs.agents[A][IDLE][TICK] == [(1.0, BUSY)]
         assert defs.agents[A][BUSY][TICK] == [(1.0, IDLE)]
 
     def test_multiple_agents(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(B, IDLE, STEP, 2.0, DONE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(B, IDLE, STEP, DONE, 2.0)
         assert defs.agents[A][IDLE][TICK] == [(1.0, BUSY)]
         assert defs.agents[B][IDLE][STEP] == [(2.0, DONE)]
 
     def test_zero_weight_raises(self) -> None:
         defs = AgentDefinitions()
         with pytest.raises(ValueError):
-            defs.add_transition(A, IDLE, TICK, 0.0, BUSY)
+            defs.add_transition(A, IDLE, TICK, BUSY, 0.0)
 
     def test_negative_weight_raises(self) -> None:
         defs = AgentDefinitions()
         with pytest.raises(ValueError):
-            defs.add_transition(A, IDLE, TICK, -1.0, BUSY)
+            defs.add_transition(A, IDLE, TICK, BUSY, -1.0)
 
     def test_absent_agent_not_in_table(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         assert B not in defs.agents
 
     def test_order_preserved(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 3.0, DONE)
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, IDLE, TICK, 2.0, IDLE)
+        defs.add_transition(A, IDLE, TICK, DONE, 3.0)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, IDLE, TICK, IDLE, 2.0)
         outcomes = defs.agents[A][IDLE][TICK]
         assert outcomes[0] == (3.0, DONE)
         assert outcomes[1] == (1.0, BUSY)
@@ -123,21 +123,21 @@ class TestAgentsProperty:
 
     def test_mutation_of_returned_list_does_not_affect_internal(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         snapshot = defs.agents
         snapshot[A][IDLE][TICK].append((9.0, DONE))
         assert defs.agents[A][IDLE][TICK] == [(1.0, BUSY)]
 
     def test_mutation_of_returned_inner_dict_does_not_affect_internal(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         snapshot = defs.agents
         snapshot[A][IDLE][STEP] = [(9.0, DONE)]
         assert STEP not in defs.agents[A][IDLE]
 
     def test_absent_agent_not_in_result(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         assert B not in defs.agents
 
 
@@ -509,7 +509,7 @@ class TestAgentsStep:
     def test_dynamics_applied(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, IDLE)
+        defs.add_transition(A, IDLE, tick, IDLE, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         defs.add_dynamics(A, lambda rng, s, dt: s.features.set("x", s.features.get("x", 0) + dt))
         conf2 = defs.agents_step(RNG, self._conf(A, IDLE), 2.0)
@@ -518,7 +518,7 @@ class TestAgentsStep:
     def test_action_fires_after_dynamics(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         conf2 = defs.agents_step(RNG, self._conf(A, IDLE), 1.0)
         assert conf2.get(0).agent_state == BUSY
@@ -561,7 +561,7 @@ class TestActionExecutionsStep:
     def test_enabled_action_fires(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         conf = self._conf((A, IDLE))
         conf2 = defs.action_executions_step(RNG, conf)
@@ -570,7 +570,7 @@ class TestActionExecutionsStep:
     def test_agent_without_action_unchanged(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         # B has no transitions → stays as-is
         conf = self._conf((A, IDLE), (B, IDLE))
@@ -591,7 +591,7 @@ class TestActionExecutionsStep:
     def test_all_agents_processed(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         conf = self._conf((A, IDLE), (A, IDLE), (A, IDLE))
         conf2 = defs.action_executions_step(RNG, conf)
@@ -601,7 +601,7 @@ class TestActionExecutionsStep:
         received: list = []
         tick = Action("tick", lambda rng, s, o: received.append(rng) or s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         conf = self._conf((A, IDLE))
         defs.action_executions_step(RNG, conf)
@@ -803,7 +803,7 @@ class TestExecuteStep:
     def test_returns_aconf_when_weight_is_zero(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 0.0)
         aconf = self._aconf()
         assert defs.execute_step(RNG, aconf) is aconf
@@ -811,7 +811,7 @@ class TestExecuteStep:
     def test_transitions_when_action_enabled(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         result = defs.execute_step(RNG, self._aconf())
         assert result.agent_state == BUSY
@@ -819,7 +819,7 @@ class TestExecuteStep:
     def test_returns_new_instance_when_action_fires(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         aconf = self._aconf()
         assert defs.execute_step(RNG, aconf) is not aconf
@@ -827,14 +827,14 @@ class TestExecuteStep:
     def test_agent_preserved(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         assert defs.execute_step(RNG, self._aconf(A)).agent is A
 
     def test_state_updated_by_action(self) -> None:
         tick = Action("tick", lambda rng, s, o: s.set("done", True))
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.set_action_weight(A, tick, lambda s: 1.0)
         result = defs.execute_step(RNG, self._aconf())
         assert result.agent_store.state["done"] is True
@@ -861,14 +861,14 @@ class TestExecuteAction:
     def test_next_agent_state_set(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         result = defs.execute_action(RNG, self._aconf(), tick)
         assert result.agent_state == BUSY
 
     def test_state_store_updated_by_action(self) -> None:
         tick = Action("tick", lambda rng, s, o: s.set("ticked", True))
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         result = defs.execute_action(RNG, self._aconf(), tick)
         assert result.agent_store.state["ticked"] is True
 
@@ -876,7 +876,7 @@ class TestExecuteAction:
         received: list = []
         tick = Action("tick", lambda rng, s, o: received.append(s) or s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         aconf = self._aconf(store_state={"k": 7})
         defs.execute_action(RNG, aconf, tick)
         assert received[0]["k"] == 7
@@ -885,7 +885,7 @@ class TestExecuteAction:
         received: list = []
         tick = Action("tick", lambda rng, s, o: received.append(o) or s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         aconf = self._aconf(obs={"signal": 42})
         defs.execute_action(RNG, aconf, tick)
         assert received[0]["signal"] == 42
@@ -894,20 +894,20 @@ class TestExecuteAction:
         received: list = []
         tick = Action("tick", lambda rng, s, o: received.append(rng) or s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         defs.execute_action(RNG, self._aconf(), tick)
         assert received[0] is RNG
 
     def test_agent_preserved(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         assert defs.execute_action(RNG, self._aconf(A), tick).agent is A
 
     def test_features_preserved(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         aconf = AgentConfiguration(A, IDLE, AgentStore(Store(), Store({"f": 9}), Store()))
         result = defs.execute_action(RNG, aconf, tick)
         assert result.agent_store.features["f"] == 9
@@ -915,8 +915,8 @@ class TestExecuteAction:
     def test_weighted_state_selection(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 100.0, BUSY)
-        defs.add_transition(A, IDLE, tick, 1.0, DONE)
+        defs.add_transition(A, IDLE, tick, BUSY, 100.0)
+        defs.add_transition(A, IDLE, tick, DONE, 1.0)
         results = [
             defs.execute_action(random.Random(seed), self._aconf(), tick).agent_state
             for seed in range(100)
@@ -932,7 +932,7 @@ class TestExecuteAction:
     def test_returns_new_instance(self) -> None:
         tick = Action("tick", lambda rng, s, o: s)
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, tick, 1.0, BUSY)
+        defs.add_transition(A, IDLE, tick, BUSY, 1.0)
         aconf = self._aconf()
         assert defs.execute_action(RNG, aconf, tick) is not aconf
 
@@ -950,21 +950,21 @@ class TestSampleAction:
 
     def test_returns_none_when_state_not_in_table(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         defs.set_action_weight(A, TICK, lambda s: 1.0)
         aconf = self._aconf(A, BUSY)
         assert defs.sample_action(RNG, aconf) is None
 
     def test_returns_none_when_all_weights_zero(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         defs.set_action_weight(A, TICK, lambda s: 0.0)
         aconf = self._aconf(A, IDLE)
         assert defs.sample_action(RNG, aconf) is None
 
     def test_single_enabled_action_always_selected(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
         defs.set_action_weight(A, TICK, lambda s: 1.0)
         aconf = self._aconf(A, IDLE)
         for seed in range(10):
@@ -972,8 +972,8 @@ class TestSampleAction:
 
     def test_disabled_action_not_selected(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, IDLE, STEP, 1.0, DONE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, IDLE, STEP, DONE, 1.0)
         defs.set_action_weight(A, TICK, lambda s: 1.0)
         defs.set_action_weight(A, STEP, lambda s: 0.0)
         aconf = self._aconf(A, IDLE)
@@ -982,8 +982,8 @@ class TestSampleAction:
 
     def test_higher_weight_selected_more_often(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, IDLE, STEP, 1.0, DONE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, IDLE, STEP, DONE, 1.0)
         defs.set_action_weight(A, TICK, lambda s: 100.0)
         defs.set_action_weight(A, STEP, lambda s: 1.0)
         aconf = self._aconf(A, IDLE)
@@ -1002,8 +1002,8 @@ class TestSampleAction:
 
     def test_deterministic_with_seed(self) -> None:
         defs = AgentDefinitions()
-        defs.add_transition(A, IDLE, TICK, 1.0, BUSY)
-        defs.add_transition(A, IDLE, STEP, 1.0, DONE)
+        defs.add_transition(A, IDLE, TICK, BUSY, 1.0)
+        defs.add_transition(A, IDLE, STEP, DONE, 1.0)
         defs.set_action_weight(A, TICK, lambda s: 1.0)
         defs.set_action_weight(A, STEP, lambda s: 1.0)
         aconf = self._aconf(A, IDLE)

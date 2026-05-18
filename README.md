@@ -48,7 +48,7 @@ pythia/
 | `pythia.models.pm` | Continuous-time stochastic population simulator (`PopulationModel`) driven by Gillespie-style reaction rules |
 | `pythia.models.lio` | Agent-based models using the Language of Interacting Objects calculus |
 | `pythia.models.nba` | Continuous-time agent-based models using the Network of Broadcasting Agents calculus |
-| `pythia.models.yoda` | Multi-agent simulation with layered data stores, typed actions, dynamics, observations, and a dual-clock scheduler (`YodaModel`) |
+| `pythia.models.yoda` | Multi-agent simulation with layered data stores (`Store`, `AgentStore`), typed actions, dynamics, observations, weighted transitions (default weight 1.0), and a dual-clock scheduler (`YodaModel`) |
 
 ### API utilities
 

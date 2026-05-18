@@ -133,6 +133,22 @@ class TestTest:
         assert Store({"flag": False}).test("flag", bool) is False
 
 
+class TestHas:
+    def test_present_attribute(self) -> None:
+        assert Store({"x": 1}).has("x") is True
+
+    def test_absent_attribute(self) -> None:
+        assert Store({"x": 1}).has("y") is False
+
+    def test_empty_store(self) -> None:
+        assert Store().has("x") is False
+
+    def test_consistent_with_contains(self) -> None:
+        s = Store({"a": 1, "b": 2})
+        for key in ("a", "b", "c"):
+            assert s.has(key) == (key in s)
+
+
 class TestSet:
     def test_update_existing(self) -> None:
         s2 = Store({"x": 1}).set("x", 10)

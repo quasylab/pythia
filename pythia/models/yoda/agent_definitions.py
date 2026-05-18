@@ -24,7 +24,7 @@ Example::
     tick = Action("tick", lambda s, o: 1.0, lambda s, o: s)
 
     defs = AgentDefinitions()
-    defs.add_transition(a, idle, tick, 1.0, busy)
+    defs.add_transition(a, idle, tick, busy, 1.0)
 
     defs.agents[a][idle][tick]   # [(1.0, AgentState('busy'))]
 """
@@ -82,7 +82,7 @@ class AgentDefinitions:
         >>> a    = Agent("worker")
         >>> tick = Action("tick", lambda s, o: 1.0, lambda s, o: s)
         >>> defs = AgentDefinitions()
-        >>> defs.add_transition(a, idle, tick, 1.0, busy)
+        >>> defs.add_transition(a, idle, tick, busy, 1.0)
         >>> defs.agents[a][idle][tick]
         [(1.0, AgentState('busy'))]
     """
@@ -116,7 +116,7 @@ class AgentDefinitions:
             >>> a    = Agent("a")
             >>> tick = Action("tick", lambda s, o: 1.0, lambda s, o: s)
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 2.0, idle)
+            >>> defs.add_transition(a, idle, tick, idle, 2.0)
             >>> defs.agents[a][idle][tick]
             [(2.0, AgentState('idle'))]
         """
@@ -127,8 +127,8 @@ class AgentDefinitions:
         agent: Agent,
         source: AgentState,
         action: Action,
-        weight: float,
         target: AgentState,
+        weight: float = 1.0,
     ) -> None:
         """Record a weighted transition for *agent*.
 
@@ -140,9 +140,9 @@ class AgentDefinitions:
             agent: The agent to which the transition belongs.
             source: The source behavioural state.
             action: The action that triggers the transition.
-            weight: A strictly positive float representing the propensity of
-                this outcome.
             target: The resulting behavioural state.
+            weight: A strictly positive float representing the propensity of
+                this outcome.  Defaults to ``1.0``.
 
         Raises:
             ValueError: If *weight* is not strictly positive.
@@ -157,7 +157,7 @@ class AgentDefinitions:
             >>> a    = Agent("a")
             >>> tick = Action("tick", lambda s, o: 1.0, lambda s, o: s)
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 1.0, busy)
+            >>> defs.add_transition(a, idle, tick, busy, 1.0)
             >>> defs.agents[a][idle][tick]
             [(1.0, AgentState('busy'))]
         """
@@ -484,7 +484,7 @@ class AgentDefinitions:
             >>> busy = AgentState("busy")
             >>> tick = Action("tick", lambda rng, s, o: s)
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 1.0, busy)
+            >>> defs.add_transition(a, idle, tick, busy, 1.0)
             >>> defs.set_action_weight(a, tick, lambda s: 1.0)
             >>> defs.add_dynamics(a, lambda rng, s, dt: s.features.set("x", s.features.get("x", 0) + dt))
             >>> store = AgentStore(Store(), Store({"x": 0.0}), Store())
@@ -536,7 +536,7 @@ class AgentDefinitions:
             >>> busy = AgentState("busy")
             >>> tick = Action("tick", lambda rng, s, o: s)
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 1.0, busy)
+            >>> defs.add_transition(a, idle, tick, busy, 1.0)
             >>> defs.set_action_weight(a, tick, lambda s: 1.0)
             >>> store = AgentStore(Store(), Store(), Store())
             >>> aconf = AgentConfiguration(a, idle, store)
@@ -771,7 +771,7 @@ class AgentDefinitions:
             >>> idle = AgentState("idle")
             >>> tick = Action("tick", lambda rng, s, o: s)
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 1.0, idle)
+            >>> defs.add_transition(a, idle, tick, idle, 1.0)
             >>> defs.set_action_weight(a, tick, lambda s: 1.0)
             >>> store = AgentStore(Store(), Store(), Store())
             >>> aconf = AgentConfiguration(a, idle, store)
@@ -839,7 +839,7 @@ class AgentDefinitions:
             >>> busy = AgentState("busy")
             >>> tick = Action("tick", lambda rng, s, o: s.set("ticked", True))
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 1.0, busy)
+            >>> defs.add_transition(a, idle, tick, busy, 1.0)
             >>> store = AgentStore(Store(), Store(), Store())
             >>> aconf = AgentConfiguration(a, idle, store)
             >>> result = defs.execute_action(random.Random(0), aconf, tick)
@@ -890,7 +890,7 @@ class AgentDefinitions:
             >>> busy = AgentState("busy")
             >>> tick = Action("tick", lambda rng, s, o: s)
             >>> defs = AgentDefinitions()
-            >>> defs.add_transition(a, idle, tick, 1.0, busy)
+            >>> defs.add_transition(a, idle, tick, busy, 1.0)
             >>> defs.set_action_weight(a, tick, lambda s: 1.0)
             >>> store = AgentStore(Store(), Store(), Store())
             >>> aconf = AgentConfiguration(a, idle, store)

@@ -26,9 +26,12 @@ Example::
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
+from typing import TypeVar, Iterator
 
 from pythia.models.yoda.agent_configuration import AgentConfiguration
 from pythia.models.yoda.agent_store import AgentStore
+
+_T = TypeVar("_T")
 
 # Preserve built-in names shadowed by same-named methods below.
 builtins_min = min
@@ -123,6 +126,51 @@ class SystemConfiguration:
         """
         return SystemConfiguration(f(self._elements[i])  # type: ignore[index]
                                    for i in range(len(self._elements)))  # type: ignore[arg-type]
+
+    def eval(
+        self,
+        predicate: Callable[[AgentStore], bool],
+        f: Callable[[AgentConfiguration], _T],
+    ) -> list[_T]:
+        """Evaluate *f* on every agent whose store satisfies *predicate*.
+
+        Iterates over every
+        :class:`~pythia.models.yoda.agent_configuration.AgentConfiguration`
+        in order, applies *predicate* to its
+        :attr:`~pythia.models.yoda.agent_configuration.AgentConfiguration.agent_store`,
+        and for those that pass applies *f* to the full configuration and
+        collects the result.
+
+        Args:
+            predicate: A callable ``AgentStore -> bool`` used to select agents.
+            f: A callable ``AgentConfiguration -> T`` applied to each
+                selected configuration.
+
+        Returns:
+            A list of results in the order the matching agents appear in the
+            configuration.  The list is empty when no agent satisfies
+            *predicate*.
+
+        Example:
+            >>> from pythia.models.yoda.agent import Agent
+            >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
+            >>> from pythia.models.yoda.agent_state import AgentState
+            >>> from pythia.models.yoda.agent_store import AgentStore
+            >>> from pythia.models.yoda.store import Store
+            >>> def _ac(name, energy):
+            ...     return AgentConfiguration(
+            ...         Agent(name), AgentState("s"),
+            ...         AgentStore(Store(), Store(), Store({"energy": energy})),
+            ...     )
+            >>> cfg = SystemConfiguration([_ac("a", 5.0), _ac("b", 0.0), _ac("c", 3.0)])
+            >>> cfg.eval(lambda s: s.get("energy") is not None and s.get("energy") > 0, lambda ac: ac.agent.name)
+            ['a', 'c']
+        """
+        return [
+            f(self._elements[i])  # type: ignore[index]
+            for i in range(len(self._elements))  # type: ignore[arg-type]
+            if predicate(self._elements[i].agent_store)  # type: ignore[index]
+        ]
 
     def remove(self, idx: int) -> SystemConfiguration:
         """Return a new :class:`SystemConfiguration` with the element at *idx* removed.
@@ -423,3 +471,4 @@ class SystemConfiguration:
 
     def __repr__(self) -> str:
         return f"SystemConfiguration({list(self._elements)!r})"  # type: ignore[arg-type]
+

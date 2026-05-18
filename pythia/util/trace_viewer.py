@@ -34,6 +34,8 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from matplotlib.figure import Figure
+
 from pythia.api.data_tracer import DataTracer
 from pythia.util.trajectory_2d import Trajectory2D
 
@@ -162,26 +164,29 @@ class TraceViewer:
         x_lo, x_hi = x_min - x_pad, x_max + x_pad
         y_lo, y_hi = y_min - y_pad, y_max + y_pad
 
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(5, 5))
+
+#        scatter = {trj[0]: ax.scatter(trj[1].get(0)[1],trj[1].get(0)[2], c="b", s=20) for trj in trajectories.items()}
+#        scatter = plt.scatter(trj[1].get(0)[1],trj[1].get(0)[2], c="b", s=20)
 
         def update(frame: int) -> list:
             ax.clear()
             ax.set_xlim(x_lo, x_hi)
             ax.set_ylim(y_lo, y_hi)
-            artists = []
-            for name, traj in trajectories.items():
-                _, x, y, fmt = traj.get(frame)
-                line, = ax.plot(x, y, fmt, label=name)
-                artists.append(line)
-            if len(trajectories) > 1:
-                ax.legend(loc="upper right")
-            return artists
+            scatters = []
+            for trj in trajectories.items():
+                scatter = ax.scatter([trj[1].get(frame)[1]],[trj[1].get(frame)[2]], c=trj[1].get(frame)[3], s=20)
+                scatters.append(scatter)
+            return scatters
 
-        return FuncAnimation(
+        anim = FuncAnimation(
             fig,
             update,
             frames=n_frames,
             interval=100,
             blit=False,
-            repeat=True,
+            repeat=False,
         )
+
+        plt.show()
+        return anim

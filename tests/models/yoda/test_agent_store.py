@@ -209,6 +209,32 @@ class TestSetObservations:
 # apply_dynamics
 # ---------------------------------------------------------------------------
 
+class TestHas:
+    def test_present_in_state(self) -> None:
+        s = _make(state={"x": 1})
+        assert s.has("x") is True
+
+    def test_present_in_features(self) -> None:
+        s = _make(features={"y": 2})
+        assert s.has("y") is True
+
+    def test_present_in_observations(self) -> None:
+        s = _make(observations={"z": 3})
+        assert s.has("z") is True
+
+    def test_absent_from_all_layers(self) -> None:
+        s = _make(state={"a": 1}, features={"b": 2}, observations={"c": 3})
+        assert s.has("missing") is False
+
+    def test_empty_store(self) -> None:
+        assert _make().has("x") is False
+
+    def test_state_takes_priority_check(self) -> None:
+        # attribute in multiple layers — has() should still return True
+        s = _make(state={"k": 1}, features={"k": 2})
+        assert s.has("k") is True
+
+
 class TestApplyDynamics:
     def test_features_updated(self) -> None:
         s = _make(features={"x": 0.0})

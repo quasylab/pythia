@@ -93,6 +93,28 @@ class Store:
         """
         return attribute in self._data
 
+    def has(self, attribute: str) -> bool:
+        """Return ``True`` if *attribute* has been registered in this store.
+
+        Equivalent to ``attribute in self``.
+
+        Args:
+            attribute: The attribute name to look up.
+
+        Returns:
+            ``True`` when *attribute* is present; ``False`` otherwise.
+
+        Example:
+            >>> s = Store({"x": 1})
+            >>> s.has("x")
+            True
+            >>> s.has("y")
+            False
+            >>> Store().has("x")
+            False
+        """
+        return attribute in self._data
+
     def __len__(self) -> int:
         """Return the number of attributes in this store.
 

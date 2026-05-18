@@ -75,7 +75,7 @@ from pythia.util import ResultPlotter
 # Parameters
 # ---------------------------------------------------------------------------
 
-N          = 100    # Number of agents
+N          = 1000    # Number of agents
 
 p_meet     = 0.4    # Probability to meet another agent
 
@@ -88,7 +88,7 @@ INIT_S1  = int(BETA1*N)
 INIT_IND = N-INIT_S1-INIT_S0
 
 MAX_TIME = 70.0
-SEED     = 42
+SEED     = None
 
 # ---------------------------------------------------------------------------
 # Agents, Actions and Definitions
@@ -214,7 +214,7 @@ plotter.plot_statistics(output_folder="examples/lio", prefix="threestate_statist
 reachability = ReachabilityEstimator(model, config)
 
 dt = 1
-probs = reachability.estimate_over_time(1000,70, dt, lambda s: (_count(s, S0) == 1) or (_count(s, S1) == 1))
+probs = reachability.estimate_over_time(10,70, dt, lambda s: (_count(s, S0) == 1) or (_count(s, S1) == 1))
 
 try:
     import matplotlib.pyplot as plt

@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import random
 from collections.abc import Callable
+from typing import Iterator
 
 from pythia.models.yoda.agent import Agent
 from pythia.models.yoda.agent_state import AgentState
@@ -354,3 +355,5 @@ class AgentConfiguration:
             f"agent_state={self._agent_state!r}, "  # type: ignore[attr-defined]
             f"agent_store={self._agent_store!r})"  # type: ignore[attr-defined]
         )
+
+

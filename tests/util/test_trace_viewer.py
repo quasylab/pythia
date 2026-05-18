@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import matplotlib
 matplotlib.use("Agg")  # non-interactive backend before any pyplot import
+import matplotlib.pyplot as plt
 
 import pytest
 from matplotlib.animation import FuncAnimation
@@ -37,7 +38,7 @@ def _tracer_with(*objects: tuple[str, list[tuple[float, float, float]]]) -> Data
     return tracer
 
 
-_FTRACE = lambda m: (m["px"], m["py"], "ro")
+_FTRACE = lambda m: (m["px"], m["py"], "r")
 
 ONE_OBJ = _tracer_with(
     ("agent", [(0.0, 0.0, 0.0), (2.0, 2.0, 4.0)])
@@ -68,6 +69,10 @@ class TestConstruction:
 # ---------------------------------------------------------------------------
 
 class TestCreateAnimation:
+    def setup_method(self) -> None:
+        """Close all open figures before each test to reset matplotlib state."""
+        plt.close("all")
+
     def test_returns_func_animation(self) -> None:
         anim = TraceViewer(ONE_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
         assert isinstance(anim, FuncAnimation)
@@ -88,8 +93,8 @@ class TestCreateAnimation:
 
     def test_figure_axes_limits_set(self) -> None:
         anim = TraceViewer(ONE_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
-        # Trigger first frame to verify axes are set up
-        anim._draw_next_frame(0, False)
+        # Trigger first frame via the update function to verify axes are set up.
+        anim._func(0)
         ax = anim._fig.axes[0]
         x_lo, x_hi = ax.get_xlim()
         y_lo, y_hi = ax.get_ylim()
@@ -99,10 +104,12 @@ class TestCreateAnimation:
 
     def test_each_frame_plots_one_artist_per_object(self) -> None:
         anim = TraceViewer(TWO_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
-        anim._draw_next_frame(0, False)
+        # Call the update function directly to draw frame 0.
+        anim._func(0)
         ax = anim._fig.axes[0]
-        assert len(ax.lines) == 2
+        # create_animation uses ax.scatter() → artists are in ax.collections
+        assert len(ax.collections) == 2
 
-    def test_repeat_enabled(self) -> None:
+    def test_repeat_disabled(self) -> None:
         anim = TraceViewer(ONE_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
-        assert anim._repeat is True
+        assert anim._repeat is False

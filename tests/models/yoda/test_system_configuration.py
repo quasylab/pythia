@@ -114,6 +114,93 @@ class TestApply:
 
 
 # ---------------------------------------------------------------------------
+# eval
+# ---------------------------------------------------------------------------
+
+IDLE  = AgentState("idle")
+BUSY  = AgentState("busy")
+DONE  = AgentState("done")
+
+
+def _ac_with_store(name: str, energy: float) -> AgentConfiguration:
+    """AgentConfiguration with 'energy' in the state layer."""
+    return AgentConfiguration(
+        Agent(name),
+        AgentState("s"),
+        AgentStore(Store(), Store(), Store({"energy": energy})),
+    )
+
+
+class TestEval:
+    def test_returns_list(self) -> None:
+        cfg = SystemConfiguration([AC1])
+        assert isinstance(cfg.eval(lambda s: True, lambda ac: ac.agent_state.name), list)
+
+    def test_matching_agents_included(self) -> None:
+        cfg = SystemConfiguration([
+            _ac_with_store("a", 5.0),
+            _ac_with_store("b", 0.0),
+        ])
+        result = cfg.eval(
+            lambda s: s.get("energy") is not None and s.get("energy") > 0,
+            lambda ac: ac.agent.name,
+        )
+        assert result == ["a"]
+
+    def test_multiple_matching_agents(self) -> None:
+        cfg = SystemConfiguration([
+            _ac_with_store("a", 5.0),
+            _ac_with_store("b", 0.0),
+            _ac_with_store("c", 3.0),
+        ])
+        result = cfg.eval(
+            lambda s: s.get("energy") is not None and s.get("energy") > 0,
+            lambda ac: ac.agent.name,
+        )
+        assert result == ["a", "c"]
+
+    def test_no_match_returns_empty(self) -> None:
+        cfg = SystemConfiguration([_ac_with_store("a", 0.0)])
+        result = cfg.eval(
+            lambda s: s.get("energy") is not None and s.get("energy") > 0,
+            lambda ac: ac.agent.name,
+        )
+        assert result == []
+
+    def test_all_match(self) -> None:
+        cfg = SystemConfiguration([AC1, AC2, AC3])
+        result = cfg.eval(lambda s: True, lambda ac: ac.agent_state.name)
+        assert result == ["idle", "busy", "done"]
+
+    def test_function_receives_full_configuration(self) -> None:
+        cfg = SystemConfiguration([_ac_with_store("x", 1.0)])
+        result = cfg.eval(lambda s: True, lambda ac: (ac.agent.name, ac.agent_state.name))
+        assert result == [("x", "s")]
+
+    def test_predicate_uses_agent_store(self) -> None:
+        cfg = SystemConfiguration([_ac_with_store("a", 2.0), _ac_with_store("b", 0.0)])
+        result = cfg.eval(lambda s: s.has("energy") and s.get("energy") > 1, lambda ac: ac.agent.name)
+        assert result == ["a"]
+
+    def test_order_preserved(self) -> None:
+        cfg = SystemConfiguration([
+            _ac_with_store("c", 0.0),
+            _ac_with_store("a", 1.0),
+            _ac_with_store("b", 0.0),
+        ])
+        result = cfg.eval(
+            lambda s: s.get("energy") is not None and s.get("energy") > 0,
+            lambda ac: ac.agent.name,
+        )
+        assert result == ["a"]
+
+    def test_generic_return_type(self) -> None:
+        cfg = SystemConfiguration([AC1, AC2])
+        result = cfg.eval(lambda s: True, lambda ac: 42)
+        assert result == [42, 42]
+
+
+# ---------------------------------------------------------------------------
 # remove
 # ---------------------------------------------------------------------------
 

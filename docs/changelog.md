@@ -5,6 +5,49 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.8.0] — 2026-05-18
+
+### Added
+
+- `Store.has(attribute)` — explicit named method returning ``True`` when an
+  attribute is registered; equivalent to ``attribute in store`` but more
+  discoverable
+- `AgentStore.has(attribute)` — returns ``True`` when *attribute* is present
+  in any of the three layers (`state`, `features`, or `observations`), using
+  short-circuit evaluation
+- `CountingState.size` — total item count computed once at construction and
+  propagated through `add` / `remove` (O(1) access)
+- `CountingState.count(species)` — item count for a given species; 0 if absent
+- `SystemConfiguration.eval(predicate, f)` — returns a list of ``f(aconf)``
+  for every ``AgentConfiguration`` whose ``agent_store`` satisfies
+  ``predicate``; generic return type via ``TypeVar``
+- `examples/yoda/flock.py` — Boids-style flocking example for `models.yoda`
+- `examples/yoda/randomwalk.py` — random walk example for `models.yoda`
+
+### Changed
+
+- `AgentStore.__init__` — `observations`, `features`, and `state` now default
+  to an empty ``Store()``; all three parameters are optional
+- `AgentDefinitions.add_transition` — parameter order changed from
+  ``(agent, source, action, weight, target)`` to
+  ``(agent, source, action, target, weight=1.0)``; ``weight`` now has a
+  default of ``1.0`` and is the last parameter
+- `SystemConfiguration.eval` — **breaking**: predicate and function are now
+  over ``AgentConfiguration`` / ``AgentStore`` (see Added); previous
+  ``AgentState``-based signature replaced
+- `TraceViewer.create_animation` — animation updated to use ``ax.scatter()``
+  instead of ``ax.plot()``, ``repeat=False``, and calls ``plt.show()`` before
+  returning
+
+### Fixed
+
+- `tests/util/test_trace_viewer.py` — test suite now adds ``setup_method``
+  calling ``plt.close("all")`` to prevent matplotlib state from accumulating
+  across tests; `_draw_next_frame` replaced by `_func`; assertions updated for
+  scatter-based artists and ``repeat=False``
+
+---
+
 ## [0.7.0] — 2026-05-12
 
 ### Added

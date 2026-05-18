@@ -46,8 +46,11 @@ class AgentStore:
 
     Args:
         observations: Values observed from the environment or other agents.
+            Defaults to an empty :class:`~pythia.models.yoda.store.Store`.
         features: Derived or computed attributes set by the system.
+            Defaults to an empty :class:`~pythia.models.yoda.store.Store`.
         state: Private state variables owned by the agent.
+            Defaults to an empty :class:`~pythia.models.yoda.store.Store`.
 
     Example:
         >>> from pythia.models.yoda.store import Store
@@ -68,9 +71,9 @@ class AgentStore:
 
     def __init__(
         self,
-        observations: Store,
-        features: Store,
-        state: Store,
+        observations: Store = Store(),
+        features: Store = Store(),
+        state: Store = Store(),
     ) -> None:
         object.__setattr__(self, "_observations", observations)
         object.__setattr__(self, "_features", features)
@@ -152,6 +155,42 @@ class AgentStore:
         if attribute in self.observations:
             return self.observations[attribute]
         return None
+
+    def has(self, attribute: str) -> bool:
+        """Return ``True`` if *attribute* is registered in any layer.
+
+        An attribute is considered registered when it is present in at least
+        one of the three layers: :attr:`state`, :attr:`features`, or
+        :attr:`observations`.
+
+        Args:
+            attribute: The attribute name to look up.
+
+        Returns:
+            ``True`` when *attribute* appears in :attr:`state`,
+            :attr:`features`, or :attr:`observations`; ``False`` otherwise.
+
+        Example:
+            >>> from pythia.models.yoda.store import Store
+            >>> s = AgentStore(
+            ...     Store({"obs": 1}),
+            ...     Store({"feat": 2}),
+            ...     Store({"st": 3}),
+            ... )
+            >>> s.has("obs")
+            True
+            >>> s.has("feat")
+            True
+            >>> s.has("st")
+            True
+            >>> s.has("missing")
+            False
+        """
+        return (
+            self.state.has(attribute)
+            or self.features.has(attribute)
+            or self.observations.has(attribute)
+        )
 
     def set_state(self, state: Store) -> AgentStore:
         """Return a new :class:`AgentStore` with :attr:`state` replaced.
