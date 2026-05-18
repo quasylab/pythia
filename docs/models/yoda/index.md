@@ -13,20 +13,22 @@ typed actions.
 ### Data stores
 
 A [`Store`](store.md) is an immutable key-value mapping (attribute name →
-arbitrary value) that supports priority-order lookup, predicate testing, and
-non-destructive update via `set`.
+float value) that supports priority-order lookup, predicate testing (`test`),
+attribute registration check (`has`), and non-destructive update via `set`.
 
 An [`AgentStore`](agent_store.md) groups three `Store` layers for a single
-agent:
+agent.  All three layers default to an empty `Store()` so only the layers that
+carry data need to be specified:
 
-| Layer | Purpose |
-|---|---|
-| `state` | Private state variables owned by the agent |
-| `features` | Derived or computed attributes set by the environment |
-| `observations` | Values observed from the environment or other agents |
+| Layer | Purpose | Default |
+|---|---|---|
+| `state` | Private state variables owned by the agent | `Store()` |
+| `features` | Derived or computed attributes set by the environment | `Store()` |
+| `observations` | Values observed from the environment or other agents | `Store()` |
 
 `AgentStore.get(attr)` resolves attributes in priority order: `state` →
-`features` → `observations`.
+`features` → `observations`.  `AgentStore.has(attr)` returns `True` when the
+attribute is present in **any** layer.
 
 ### Agents and behavioural states
 
@@ -64,8 +66,11 @@ A [`SystemConfiguration`](system_configuration.md) is an immutable ordered
 list of `AgentConfiguration` objects representing the full population at one
 point in time.  It provides:
 
-- Positional access (`get(i)`), size, and element removal.
+- Positional access (`get(i)`), size, and element removal (`remove`).
 - Bulk transformation (`apply(f)`).
+- Filtered evaluation: `eval(predicate, f)` — applies `f` to every
+  `AgentConfiguration` whose `agent_store` satisfies `predicate`, returning a
+  `list[T]`.
 - Quantitative queries: `exists`, `forall`, `mean`, `min`, `max` — all
   optionally restricted to a subset of agents by index or predicate.
 
@@ -76,7 +81,7 @@ describes agent behaviour.  It stores five kinds of information:
 
 | Table | Set via | Purpose |
 |---|---|---|
-| Transition table | `add_transition(agent, source, action, weight, target)` | Weighted next-state distribution for each `(agent, state, action)` triple |
+| Transition table | `add_transition(agent, source, action, target, weight=1.0)` | Weighted next-state distribution for each `(agent, state, action)` triple; `weight` defaults to `1.0` |
 | Dynamics | `add_dynamics(agent, f)` / `default_dynamics` | Continuous evolution of features: `(rng, AgentStore, dt) -> Store` |
 | Observations | `add_observation(agent, f)` / `default_observation` | Compute observations from the full system: `(rng, AgentStore, SystemConfiguration) -> Store` |
 | Action weights | `set_action_weight` / `set_default_action_weight` | Propensity of each action given the current store |
@@ -112,14 +117,14 @@ When both schedules coincide, `agents_step` (environment + actions) is used.
 
 | Class | Module | Purpose |
 |---|---|---|
-| [`Store`](store.md) | `pythia.models.yoda.store` | Immutable attribute-value mapping |
-| [`AgentStore`](agent_store.md) | `pythia.models.yoda.agent_store` | Three-layer data store for one agent |
+| [`Store`](store.md) | `pythia.models.yoda.store` | Immutable float attribute-value mapping; `has(attr)` checks registration |
+| [`AgentStore`](agent_store.md) | `pythia.models.yoda.agent_store` | Three-layer data store (all layers optional, default `Store()`); `has(attr)` checks any layer |
 | [`Action`](action.md) | `pythia.models.yoda.action` | Named transition with a step function |
 | [`Agent`](agent.md) | `pythia.models.yoda.agent` | Named participant |
 | [`AgentState`](agent_state.md) | `pythia.models.yoda.agent_state` | Named behavioural state |
 | [`AgentConfiguration`](agent_configuration.md) | `pythia.models.yoda.agent_configuration` | Immutable (agent, state, store) triple |
 | [`AgentDefinitions`](agent_definitions.md) | `pythia.models.yoda.agent_definitions` | Transitions, dynamics, observations, weights |
-| [`SystemConfiguration`](system_configuration.md) | `pythia.models.yoda.configuration` | Immutable ordered population snapshot |
+| [`SystemConfiguration`](system_configuration.md) | `pythia.models.yoda.configuration` | Immutable ordered population snapshot; `eval(pred, f)` for filtered results |
 | [`YodaModel`](yoda_model.md) | `pythia.models.yoda.yoda_model` | Simulation model (BaseModel) |
 
 ---
@@ -148,21 +153,21 @@ tick = Action(
     ),
 )
 
-# 3. Register transitions and weights
+# 3. Register transitions (weight defaults to 1.0)
 defs = AgentDefinitions()
-defs.add_transition(a, idle, tick, 1.0, busy)
-defs.add_transition(a, busy, tick, 1.0, idle)
+defs.add_transition(a, idle, tick, busy)   # idle --tick--> busy
+defs.add_transition(a, busy, tick, idle)   # busy --tick--> idle
 defs.set_default_action_weight(tick, lambda s: 1.0)
 
-# 4. Register dynamics (features grow over time)
+# 4. Register dynamics (energy decreases over time)
 defs.add_dynamics(
     a,
     lambda rng, s, dt: s.features.set("energy", s.features.get("energy", 1.0) - 0.1 * dt),
 )
 
-# 5. Build initial configuration
+# 5. Build initial configuration (AgentStore layers are optional)
 def initial(rng: random.Random) -> SystemConfiguration:
-    store = AgentStore(Store(), Store({"energy": 1.0}), Store())
+    store = AgentStore(features=Store({"energy": 1.0}))
     return SystemConfiguration([AgentConfiguration(a, idle, store)])
 
 # 6. Run
@@ -176,6 +181,13 @@ state = SimulationRunner(model, SimulationConfig(max_time=10.0, random_seed=42))
 cfg = state.data["yoda.configuration"]
 print(f"agent state: {cfg.get(0).agent_state.name}")
 print(f"energy:      {cfg.get(0).agent_store.features.get('energy'):.3f}")
+
+# 7. Query results using eval
+active = cfg.eval(
+    lambda s: s.get("energy") is not None and s.get("energy") > 0.5,
+    lambda ac: ac.agent.name,
+)
+print(f"agents with energy > 0.5: {active}")
 ```
 
 ---
@@ -190,3 +202,7 @@ print(f"energy:      {cfg.get(0).agent_store.features.get('energy'):.3f}")
   deterministic runs.
 - **Deadlock-free**: agents with no enabled action are silently skipped by
   `execute_step`; the model always makes forward progress.
+- **Optional store layers**: `AgentStore()` can be constructed with no arguments;
+  only layers that carry data need to be specified.
+- **Transition weights**: `add_transition` defaults `weight` to `1.0`; only
+  specify it when non-uniform weights are needed.

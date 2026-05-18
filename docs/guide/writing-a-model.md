@@ -6,7 +6,15 @@ ready implementation.
 
 ---
 
-## The three lifecycle methods
+## The lifecycle methods
+
+The runner calls lifecycle methods in the following order:
+
+1. `initialize(config)` — allocate resources, seed RNGs.
+2. `setup(state)` *(optional override)* — populate `state.data` with the true
+   initial state so that measures collected at `t = 0` are correct.
+3. Step loop: `step(state)` repeatedly until `dt = 0` or `max_time` reached.
+4. `finalize(state)` — flush buffers, compute summaries.
 
 ```python
 from pythia.api import BaseModel, SimulationConfig, SimulationState
@@ -21,6 +29,10 @@ class MyModel(BaseModel):
     def initialize(self, config: SimulationConfig) -> None:
         """Called once before the run loop. Allocate resources here."""
         ...
+
+    def setup(self, state: SimulationState) -> None:
+        """Optional: pre-populate state.data so t=0 measures are correct."""
+        state.data["my_model.value"] = 0.0   # initial value visible at t=0
 
     def step(self, state: SimulationState) -> tuple[float, SimulationState]:
         """Advance the simulation by one tick. Returns (dt, state)."""

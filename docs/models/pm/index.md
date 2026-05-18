@@ -24,6 +24,13 @@ each species to a non-negative integer count.  It is used both to represent
 the current population and to describe the stoichiometry of reaction rules
 (the *pre* and *post* states of each rule).
 
+Key convenience accessors:
+
+| Method / Property | Description |
+|---|---|
+| `size` | Total number of individuals across all species (O(1), updated by `add`/`remove`) |
+| `count(species)` | Number of individuals of a given species; `0` if absent |
+
 ### Reaction rules
 
 A [`Rule`](rule.md) encodes a single stochastic reaction: a *pre* condition
@@ -91,9 +98,9 @@ model = PopulationModel(
 )
 state = SimulationRunner(model, SimulationConfig(max_time=50.0, random_seed=42)).run()
 
-cv = state.data["pm.counting_state"].counting_vector
-print(f"S={cv.get(S.index, 0)}  I={cv.get(I.index, 0)}  R={cv.get(R.index, 0)}")
-print(f"Steps: {state.step}  Elapsed: {state.elapsed_time:.2f}")
+cs = state.data["pm.counting_state"]
+print(f"S={cs.count(S)}  I={cs.count(I)}  R={cs.count(R)}")
+print(f"Total: {cs.size}  Steps: {state.step}  Elapsed: {state.elapsed_time:.2f}")
 ```
 
 ---

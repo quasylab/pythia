@@ -122,4 +122,10 @@ nav:
       - AgentDefinitions: models/yoda/agent_definitions.md
       - SystemConfiguration: models/yoda/system_configuration.md
       - YodaModel: models/yoda/yoda_model.md
+  - Examples:
+    - pm — SEIR: examples/pm/seir.md
+    - pm — Majority: examples/pm/majority.md
+    - lio — Three State: examples/lio/threestate.md
+    - yoda — Random Walk: examples/yoda/randomwalk.md
+    - yoda — Flock: examples/yoda/flock.md
   - Changelog: changelog.md
