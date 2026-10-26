@@ -18,7 +18,7 @@ A         = 100    dimension of the areas where the agents operate
 N         = 100    number of agents
 CA        = 3      Communication Area 
 
-̄𝜶 (alpha) = 0.4    agents interaction rate rate
+̄𝜶 (alpha) = 0.4    agents interaction rate
 
 β (beta)  = 0.4    fraction of blue agents
 

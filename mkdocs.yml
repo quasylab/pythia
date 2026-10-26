@@ -4,8 +4,8 @@ site_author: Pythia contributors
 docs_dir: docs
 site_dir: site
 
-repo_url: https://github.com/loreti/pythia
-repo_name: loreti/pythia
+repo_url: https://github.com/quasylab/pythia
+repo_name: quasylab/pythia
 edit_uri: edit/main/docs/
 
 theme:

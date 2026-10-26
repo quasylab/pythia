@@ -9,7 +9,7 @@
 Clone the repository and install in editable mode:
 
 ```bash
-git clone https://github.com/loreti/pythia.git
+git clone https://github.com/quasylab/pythia.git
 cd pythia
 pip install -e ".[dev]"
 ```

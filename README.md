@@ -69,7 +69,7 @@ pythia/
 | `DataStatistics` | Computes mean, std, Q1/Q2/Q3, min and max across a `list[DataTable]` using NumPy (requires `pip install 'pythia[visualization]'`) |
 | `ResultPlotter` | Generates raw-run and statistical-summary Matplotlib figures from a `list[DataTable]` (requires `pip install 'pythia[visualization]'`) |
 | `Trajectory2D` | Immutable time-ordered 2-D trajectory from a `DataTable` and a trace function; supports linear-time normalisation onto a uniform grid |
-| `TraceViewer` | Builds and returns a `FuncAnimation` from a `DataTracer`, animating every named object through 2-D space (requires `pip install 'pythia[visualization]'`) |
+| `TraceViewer` | Builds and returns (without showing) a `FuncAnimation` from a `DataTracer`, animating every named object through 2-D space; call `plt.show()` or `anim.save(...)` on the result (requires `pip install 'pythia[visualization]'`) |
 
 ## Quick start
 
@@ -170,7 +170,7 @@ print(f"Final position: {state.data['position']}")
 ## Installation
 
 ```bash
-git clone https://github.com/loreti/pythia.git
+git clone https://github.com/quasylab/pythia.git
 cd pythia
 pip install -e ".[dev]"
 ```

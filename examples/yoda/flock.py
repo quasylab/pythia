@@ -3,58 +3,55 @@
 This YODA model is used to describe the behaviour of a set of agents moving
 according to the Reynolds' model.
 
-Agents move according three rules:
+Agents move according to three rules:
 - Separation: an agent tends to change its direction when it is
   getting too close to other agents.
-- Alignment: an agent steers towards average heading of neighbours.
+- Alignment: an agent steers towards the average heading of its neighbours.
 - Cohesion: an agent moves towards the average position of its neighbours.
 
 In the proposed yoda each agent is equipped with the following attributes:
 - pos: a feature indicating the position of the agent;
-- velocity: a two-dimensional vector indicating the velocity of the agent;
+- velocity: a two-dimensional unit vector indicating the heading of the agent.
 
 Observations are used to collect the following information:
-- v_sep: a bidirectional vector indicating the direction to follow stay
-  away from other agents;
-- v_cmas: a bidirectional vector indicating the direction to reach the
-  center of mass;
-- v_aligment: a bidirectional vector indicating the average direction
-  of the agents in the surrounding.
+- separation: a two-dimensional vector indicating the direction to follow
+  to stay away from other agents;
+- cmas: a two-dimensional vector from the agent to the centre of mass of
+  its neighbours;
+- alignment: a two-dimensional vector indicating the average direction
+  of the agents in the surroundings.
 
 Parameters (defaults)
 ---------------------
-N                   = 10     Number of agents
-
-separation_distance = 10     Separation distance from other agents
-
-cohesion_strength   = 100   Cohesion strength
+N                   = 100    Number of agents
+cohesion_distance   = 1000   Radius used for cohesion
+alignment_distance  = 10     Radius used for alignment
+separation_distance = 10     Radius used for separation
+cohesion_strength   = 0.005  Weight of the cohesion vector
+separation_strength = 0.1    Weight of the separation vector
+alignment_strength  = 0.03   Weight of the alignment vector
+SPEED               = 200    Speed multiplier applied by the dynamics
 
 Auxiliary Functions
----------------------
-
-The following auxiliary functions are used in the YODA model:
-
-- normalise: a function that nomarlises a velocity vector
--
+-------------------
+- normalise: normalises a vector (the zero vector is returned unchanged);
+- centre_of_mass, separation, alignment: compute the three steering vectors.
 
 Actions
-------------
+-------
 Each agent can perform the following actions:
-- steer: the agent will select new direction.
-
-
-
+- steer: the agent selects a new direction combining the three observations.
 
 Usage
 -----
     python examples/yoda/flock.py
 
+The animation is saved to ``examples/yoda/flock.gif``.
 """
 from __future__ import annotations
 
 import random
 from collections.abc import Callable
-from turtledemo import forest
 from typing import Any
 import numpy as np
 
@@ -74,12 +71,15 @@ alignment_strength  = 0.03
 SPEED = 200
 
 def normalise(v: np.ndarray) -> np.ndarray:
-    return v / np.linalg.norm(v)
+    norm = np.linalg.norm(v)
+    if norm == 0:
+        return v
+    return v / norm
 
 def centre_of_mass(pos: np.ndarray, positions: list[np.ndarray]) -> np.ndarray:
     elements = len(positions)
     if elements > 0:
-        return pos-(np.sum(positions, 0)/elements)
+        return np.sum(positions, 0)/elements - pos
     return np.zeros(2)
 
 def separation(pos: np.ndarray, positions: list[np.ndarray]) -> np.ndarray:
@@ -95,13 +95,12 @@ def alignment(vel: np.ndarray, others: list[np.ndarray]) -> np.ndarray:
     return np.zeros(2)
 
 def steer_function(rng: random.Random, s: Store, o: Store) -> Store:
-    pos = s.get("pos",np.zeros(2))
     vel = s.get("velocity",np.zeros(2))
     v_sep = o.get("separation",np.zeros(2))
-    cmas = o.get("cmas",np.zeros(2))
+    v_cmas = o.get("cmas",np.zeros(2))
     v_alig = o.get("alignment",np.zeros(2))
-    new_vel = vel
-    new_vel += (pos - cmas)*cohesion_strength
+    new_vel = vel.copy()
+    new_vel += v_cmas*cohesion_strength
     new_vel += v_sep*separation_strength
     new_vel += v_alig*alignment_strength
     return s.set("velocity", normalise(new_vel))
@@ -184,4 +183,5 @@ tracer.run(model, configuration)
 tables = tracer.data_tracer
 
 viewer = TraceViewer(tables, lambda d: (d["x"], d["y"],"b"))
-viewer.create_animation(0, 100, 0.1)
+ani = viewer.create_animation(0, 100, 0.25)
+ani.save(filename="examples/yoda/flock.gif", writer="pillow")

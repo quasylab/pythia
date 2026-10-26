@@ -5,6 +5,26 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- `TraceViewer.create_animation` — no longer calls ``plt.show()``, which
+  blocked until the window was closed; callers now choose between
+  ``plt.show()`` and ``anim.save(...)``.  All objects are drawn by a single
+  scatter updated in place each frame instead of clearing and re-plotting
+  the axes, making animation rendering and saving much faster
+
+### Fixed
+
+- `examples/yoda/flock.py` — removed stray ``turtledemo`` import; cohesion
+  now steers towards the centre of mass (previously used an absolute position
+  and ``pos`` was read from the wrong store); the agent's velocity is no
+  longer modified in place; ``normalise`` handles the zero vector; the
+  animation is saved to ``flock.gif`` with a 0.25 frame step
+
+---
+
 ## [0.8.0] — 2026-05-18
 
 ### Added

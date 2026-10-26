@@ -111,11 +111,15 @@ class TraceViewer:
            using :attr:`ftrace`.
         3. Normalise it onto the grid ``[start, end]`` with step *dt*.
 
-        The animation iterates over the normalised time points.  At each
-        frame the axes are cleared and every object is plotted at its
-        current ``(x, y, fmt)`` position, allowing per-object, per-frame
-        format changes.  Axis limits are fixed to the bounding box of all
+        The animation iterates over the normalised time points.  All objects
+        are drawn by a single scatter whose positions and colours are updated
+        at each frame from the current ``(x, y, fmt)`` values, allowing
+        per-object, per-frame colour changes (*fmt* is used as a Matplotlib
+        colour).  Axis limits are fixed to the bounding box of all
         trajectories with 10 % padding.
+
+        The animation is not displayed: call ``plt.show()`` to view it or
+        ``anim.save(...)`` to write it to a file.
 
         Args:
             start: Start time of the animation window (≥ 0).
@@ -165,21 +169,24 @@ class TraceViewer:
         y_lo, y_hi = y_min - y_pad, y_max + y_pad
 
         fig, ax = plt.subplots(figsize=(5, 5))
+        ax.set_xlim(x_lo, x_hi)
+        ax.set_ylim(y_lo, y_hi)
 
-#        scatter = {trj[0]: ax.scatter(trj[1].get(0)[1],trj[1].get(0)[2], c="b", s=20) for trj in trajectories.items()}
-#        scatter = plt.scatter(trj[1].get(0)[1],trj[1].get(0)[2], c="b", s=20)
+        # A single scatter holds every object; frames only update its data.
+        trajs = [trajectories[name] for name in names]
+        first = [traj.get(0) for traj in trajs]
+        scatter = ax.scatter(
+            [p[1] for p in first], [p[2] for p in first],
+            c=[p[3] for p in first], s=20,
+        )
 
         def update(frame: int) -> list:
-            ax.clear()
-            ax.set_xlim(x_lo, x_hi)
-            ax.set_ylim(y_lo, y_hi)
-            scatters = []
-            for trj in trajectories.items():
-                scatter = ax.scatter([trj[1].get(frame)[1]],[trj[1].get(frame)[2]], c=trj[1].get(frame)[3], s=20)
-                scatters.append(scatter)
-            return scatters
+            points = [traj.get(frame) for traj in trajs]
+            scatter.set_offsets([(p[1], p[2]) for p in points])
+            scatter.set_color([p[3] for p in points])
+            return [scatter]
 
-        anim = FuncAnimation(
+        return FuncAnimation(
             fig,
             update,
             frames=n_frames,
@@ -187,6 +194,3 @@ class TraceViewer:
             blit=False,
             repeat=False,
         )
-
-        plt.show()
-        return anim

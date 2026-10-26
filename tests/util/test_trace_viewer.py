@@ -102,13 +102,20 @@ class TestCreateAnimation:
         assert x_lo < 0.0 and x_hi > 2.0
         assert y_lo < 0.0 and y_hi > 4.0
 
-    def test_each_frame_plots_one_artist_per_object(self) -> None:
+    def test_each_frame_plots_one_point_per_object(self) -> None:
         anim = TraceViewer(TWO_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
         # Call the update function directly to draw frame 0.
         anim._func(0)
         ax = anim._fig.axes[0]
-        # create_animation uses ax.scatter() → artists are in ax.collections
-        assert len(ax.collections) == 2
+        # A single scatter collection holds one point per object
+        assert len(ax.collections) == 1
+        assert len(ax.collections[0].get_offsets()) == 2
+
+    def test_update_moves_points(self) -> None:
+        anim = TraceViewer(ONE_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
+        anim._func(2)
+        offsets = anim._fig.axes[0].collections[0].get_offsets()
+        assert tuple(offsets[0]) == (2.0, 4.0)
 
     def test_repeat_disabled(self) -> None:
         anim = TraceViewer(ONE_OBJ, _FTRACE).create_animation(0.0, 2.0, 1.0)
