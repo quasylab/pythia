@@ -2,6 +2,8 @@
 
 A modular simulation framework in Python.
 
+📖 Documentation: <https://quasylab.github.io/pythia/>
+
 ## Overview
 
 Pythia provides a structured environment for building and running discrete-event
@@ -193,6 +195,9 @@ pytest
 mkdocs serve       # live-reload preview at http://localhost:8000
 mkdocs build       # static site written to site/
 ```
+
+The site is published to GitHub Pages by `.github/workflows/docs.yml` on every
+push to `main`.
 
 ## Development
 

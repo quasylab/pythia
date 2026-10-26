@@ -1,6 +1,7 @@
 site_name: Pythia
 site_description: A modular simulation framework in Python
 site_author: Pythia contributors
+site_url: https://quasylab.github.io/pythia/
 docs_dir: docs
 site_dir: site
 

@@ -46,6 +46,7 @@ visualization = [
 ]
 
 [project.urls]
+Documentation = "https://quasylab.github.io/pythia/"
 Repository = "https://github.com/quasylab/pythia"
 Issues = "https://github.com/quasylab/pythia/issues"
 
