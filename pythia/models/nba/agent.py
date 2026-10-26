@@ -41,7 +41,7 @@ class Agent:
     Raises:
         ValueError: If *name* is empty.
 
-    Example:
+    Examples:
         >>> a1 = Agent("idle")
         >>> a2 = Agent("idle")
         >>> a1 == a2

@@ -51,7 +51,7 @@ class Send(Action):
     Attributes:
         channel: The channel on which the output is performed.
 
-    Example:
+    Examples:
         >>> c = Channel("link")
         >>> Send(c) == Send(c)
         True
@@ -75,7 +75,7 @@ class Receive(Action):
     Attributes:
         channel: The channel on which the input is performed.
 
-    Example:
+    Examples:
         >>> c = Channel("link")
         >>> Receive(c) == Receive(c)
         True
@@ -100,7 +100,7 @@ class BroadcastSend(Action):
     Attributes:
         channel: The channel on which the broadcast is performed.
 
-    Example:
+    Examples:
         >>> c = Channel("alert")
         >>> BroadcastSend(c) == BroadcastSend(c)
         True
@@ -124,7 +124,7 @@ class BroadcastReceive(Action):
     Attributes:
         channel: The channel on which the broadcast receive is performed.
 
-    Example:
+    Examples:
         >>> c = Channel("alert")
         >>> BroadcastReceive(c) == BroadcastReceive(c)
         True

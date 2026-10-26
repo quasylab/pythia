@@ -34,7 +34,7 @@ class AgentState:
     Raises:
         ValueError: If *name* is empty.
 
-    Example:
+    Examples:
         >>> s1 = AgentState("idle")
         >>> s2 = AgentState("idle")
         >>> s1 == s2
@@ -56,7 +56,7 @@ class AgentState:
     def name(self) -> str:
         """The unique string identifier for this behavioural state.
 
-        Example:
+        Examples:
             >>> AgentState("idle").name
             'idle'
         """

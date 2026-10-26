@@ -43,7 +43,7 @@ class ActionWeightFunction:
             as fallback weights that apply to all agents unless overridden in
             :attr:`action_weights`.
 
-    Example:
+    Examples:
         >>> from pythia.models.lio.agent import Agent
         >>> from pythia.models.lio.action import Action
         >>> from pythia.models.lio.lio_state_of_individuals import LIOStateOfIndividuals
@@ -74,7 +74,7 @@ class ActionWeightFunction:
                 and returns a ``float`` representing the weight of *act* for
                 *agent* in that configuration.
 
-        Example:
+        Examples:
             >>> from pythia.models.lio.agent import Agent
             >>> from pythia.models.lio.action import Action
             >>> from pythia.models.lio.lio_state_of_individuals import LIOStateOfIndividuals
@@ -100,7 +100,7 @@ class ActionWeightFunction:
                 and returns a ``float`` representing the default weight of *act*
                 in that configuration.
 
-        Example:
+        Examples:
             >>> from pythia.models.lio.agent import Agent
             >>> from pythia.models.lio.action import Action
             >>> from pythia.models.lio.lio_state_of_individuals import LIOStateOfIndividuals
@@ -133,7 +133,7 @@ class ActionWeightFunction:
             A callable ``f`` such that ``f(agent)(act)`` yields the weight
             of *act* for *agent* in configuration *conf*.
 
-        Example:
+        Examples:
             >>> from pythia.models.lio.agent import Agent
             >>> from pythia.models.lio.action import Action
             >>> from pythia.models.lio.lio_state_of_individuals import LIOStateOfIndividuals

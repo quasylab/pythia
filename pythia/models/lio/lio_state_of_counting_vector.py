@@ -48,7 +48,7 @@ class LIOStateOfCountingVector(LIOState):
         ValueError: If *counts* is empty or if any count is not a strictly
             positive integer.
 
-    Example:
+    Examples:
         >>> a = Agent("a")
         >>> b = Agent("b")
         >>> state = LIOStateOfCountingVector({a: 2, b: 1})
@@ -81,7 +81,7 @@ class LIOStateOfCountingVector(LIOState):
     def counts(self) -> dict[Agent, int]:
         """A copy of the agent→count mapping.
 
-        Example:
+        Examples:
             >>> a = Agent("a")
             >>> state = LIOStateOfCountingVector({a: 3})
             >>> state.counts == {a: 3}
@@ -93,7 +93,7 @@ class LIOStateOfCountingVector(LIOState):
     def size(self) -> int:
         """The total number of agents (sum of all counts).
 
-        Example:
+        Examples:
             >>> a = Agent("a")
             >>> b = Agent("b")
             >>> LIOStateOfCountingVector({a: 2, b: 3}).size
@@ -114,7 +114,7 @@ class LIOStateOfCountingVector(LIOState):
         Returns:
             The count for *agt*, or ``0`` if *agt* is not present.
 
-        Example:
+        Examples:
             >>> a, b = Agent("a"), Agent("b")
             >>> state = LIOStateOfCountingVector({a: 4})
             >>> state.count(a)
@@ -135,7 +135,7 @@ class LIOStateOfCountingVector(LIOState):
         Returns:
             A float in ``[0.0, 1.0]``.
 
-        Example:
+        Examples:
             >>> a, b = Agent("a"), Agent("b")
             >>> state = LIOStateOfCountingVector({a: 1, b: 3})
             >>> state.fraction(a)
@@ -177,7 +177,7 @@ class LIOStateOfCountingVector(LIOState):
             A new :class:`LIOStateOfCountingVector` whose counts reflect the
             population after one tick.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()

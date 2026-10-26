@@ -64,7 +64,7 @@ class Species:
     Raises:
         ValueError: If *index* is negative.
 
-    Example:
+    Examples:
         >>> from pythia.models.pm.population import Population
         >>> pop = Population()
         >>> wolf = pop.register("wolf", {"diet": "carnivore"})

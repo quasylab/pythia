@@ -61,7 +61,7 @@ class Rule:
             to a non-negative float rate.  A rate of zero means the rule
             cannot fire even if ``pre`` is satisfied.
 
-    Example:
+    Examples:
         >>> from pythia.models.pm.population import Population
         >>> pop = Population()
         >>> wolf   = pop.register("wolf")
@@ -96,7 +96,7 @@ class Rule:
             ``True`` when both the precondition and the rate condition are
             satisfied; ``False`` otherwise.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> a = pop.register("a")
@@ -128,7 +128,7 @@ class Rule:
             A new :class:`~pythia.models.pm.counting_state.CountingState`
             representing the population after the transition fires.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> a = pop.register("a")
@@ -170,7 +170,7 @@ class Rule:
             element is the firing rate and the second is a lazy producer of
             the post-transition state.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> a = pop.register("a")

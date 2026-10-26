@@ -40,7 +40,7 @@ class Measure:
     Raises:
         ValueError: If *frequency* is not strictly positive.
 
-    Example:
+    Examples:
         >>> state = SimulationState(data={"pm.population": 42.0})
         >>> m = Measure(name="pop", function=lambda s: s.data["pm.population"], frequency=1.0)
         >>> m.function(state)

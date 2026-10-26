@@ -39,7 +39,7 @@ class LIOStateOfIndividuals(LIOState):
     Raises:
         ValueError: If *agents* is empty.
 
-    Example:
+    Examples:
         >>> a = Agent("a")
         >>> b = Agent("b")
         >>> cfg = LIOStateOfIndividuals([a, a, b])
@@ -76,7 +76,7 @@ class LIOStateOfIndividuals(LIOState):
         Raises:
             IndexError: If *i* is out of range.
 
-        Example:
+        Examples:
             >>> cfg = LIOStateOfIndividuals([Agent("a"), Agent("b")])
             >>> cfg.agent(0)
             Agent('a')
@@ -89,7 +89,7 @@ class LIOStateOfIndividuals(LIOState):
     def size(self) -> int:
         """The number of agents in the state.
 
-        Example:
+        Examples:
             >>> LIOStateOfIndividuals([Agent("a"), Agent("a"), Agent("b")]).size
             3
         """
@@ -108,7 +108,7 @@ class LIOStateOfIndividuals(LIOState):
         Returns:
             The number of agents in the state equal to *agt*.
 
-        Example:
+        Examples:
             >>> a, b = Agent("a"), Agent("b")
             >>> cfg = LIOStateOfIndividuals([a, a, b])
             >>> cfg.count(a)
@@ -129,7 +129,7 @@ class LIOStateOfIndividuals(LIOState):
         Returns:
             A float in ``[0.0, 1.0]``.
 
-        Example:
+        Examples:
             >>> a, b = Agent("a"), Agent("b")
             >>> cfg = LIOStateOfIndividuals([a, a, b])
             >>> cfg.fraction(a)
@@ -166,7 +166,7 @@ class LIOStateOfIndividuals(LIOState):
             A new :class:`LIOStateOfIndividuals` of the same size whose *i*-th
             agent is ``definitions.step(agents[i], wfun(agents[i]), rng)``.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()

@@ -76,7 +76,7 @@ class LioModel(BaseModel):
     State keys written:
         lio.configuration (LIOState): The state at the current step.
 
-    Example:
+    Examples:
         >>> from pythia.api import SimulationConfig, SimulationRunner
         >>> from pythia.models.lio.action import Action
         >>> from pythia.models.lio.action_weight import ActionWeightFunction

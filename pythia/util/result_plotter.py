@@ -69,7 +69,7 @@ class ResultPlotter:
     Raises:
         ValueError: If *data* is empty.
 
-    Example:
+    Examples:
         >>> from pythia.api.data_table import DataTable
         >>> t = DataTable(["x"])
         >>> t.add_row(0.0, {"x": 0.0})
@@ -93,7 +93,7 @@ class ResultPlotter:
     def measures(self) -> frozenset[str]:
         """All measure names (column labels) present across every run.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["a", "b"])
             >>> t.add_row(0.0, {"a": 1.0, "b": 2.0})
@@ -152,7 +152,7 @@ class ResultPlotter:
             A list of :class:`matplotlib.figure.Figure` objects, one per
             measure, in alphabetical order.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(0.0, {"v": 1.0})
@@ -192,7 +192,7 @@ class ResultPlotter:
         Raises:
             KeyError: If *measure* is not present in any run.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["speed"])
             >>> t.add_row(0.0, {"speed": 0.0})
@@ -259,7 +259,7 @@ class ResultPlotter:
             A list of :class:`matplotlib.figure.Figure` objects, one per
             measure, in alphabetical order.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2 = DataTable(["v"]), DataTable(["v"])
             >>> t1.add_row(0.0, {"v": 1.0}); t2.add_row(0.0, {"v": 3.0})
@@ -309,7 +309,7 @@ class ResultPlotter:
         Raises:
             KeyError: If *measure* is not present in the statistics.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2 = DataTable(["v"]), DataTable(["v"])
             >>> t1.add_row(0.0, {"v": 1.0}); t2.add_row(0.0, {"v": 3.0})

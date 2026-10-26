@@ -58,7 +58,7 @@ class Environment:
         _default_receive_probability: ``Channel -> float`` (in ``(0, 1)``).
         _default_receive_weight: ``Channel -> float`` (positive).
 
-    Example:
+    Examples:
         >>> from pythia.models.nba.agent import Agent
         >>> from pythia.models.nba.channel import Channel
         >>> a = Agent("a")
@@ -99,7 +99,7 @@ class Environment:
         Raises:
             ValueError: If *rate* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -123,7 +123,7 @@ class Environment:
         Raises:
             ValueError: If *rate* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -147,7 +147,7 @@ class Environment:
         Raises:
             ValueError: If *prob* is not in the open interval ``(0, 1)``.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -173,7 +173,7 @@ class Environment:
         Raises:
             ValueError: If *weight* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -203,7 +203,7 @@ class Environment:
         Raises:
             ValueError: If *rate* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -229,7 +229,7 @@ class Environment:
         Raises:
             ValueError: If *rate* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -255,7 +255,7 @@ class Environment:
         Raises:
             ValueError: If *prob* is not in the open interval ``(0, 1)``.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -283,7 +283,7 @@ class Environment:
         Raises:
             ValueError: If *weight* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, c = Agent("a"), Channel("c")
@@ -313,7 +313,7 @@ class Environment:
         Returns:
             The resolved rate.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, b, c = Agent("a"), Agent("b"), Channel("c")
@@ -345,7 +345,7 @@ class Environment:
         Returns:
             The resolved rate.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, b, c = Agent("a"), Agent("b"), Channel("c")
@@ -377,7 +377,7 @@ class Environment:
         Returns:
             The resolved probability.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, b, c = Agent("a"), Agent("b"), Channel("c")
@@ -409,7 +409,7 @@ class Environment:
         Returns:
             The resolved weight.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent import Agent
             >>> from pythia.models.nba.channel import Channel
             >>> a, b, c = Agent("a"), Agent("b"), Channel("c")

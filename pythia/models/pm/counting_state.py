@@ -56,7 +56,7 @@ class CountingState:
         TypeError: If any count is not an :class:`int`.
         ValueError: If any count is negative.
 
-    Example:
+    Examples:
         >>> from pythia.models.pm.population import Population
         >>> pop = Population()
         >>> wolf   = pop.register("wolf")
@@ -140,7 +140,7 @@ class CountingState:
         Computed once at construction (and propagated through :meth:`add`
         and :meth:`remove`) so the value is available in O(1).
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> wolf   = pop.register("wolf")
@@ -161,7 +161,7 @@ class CountingState:
         Returns:
             The non-negative integer count; ``0`` if *species* is absent.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> wolf   = pop.register("wolf")
@@ -190,7 +190,7 @@ class CountingState:
             ``True`` when, for every index *i* in *other*,
             ``self.counting_vector.get(i, 0) >= other.counting_vector[i]``.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> wolf = pop.register("wolf")
@@ -227,7 +227,7 @@ class CountingState:
             + other.counting_vector.get(i, 0)`` for every index *i* that
             appears in either operand.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> wolf   = pop.register("wolf")
@@ -264,7 +264,7 @@ class CountingState:
             A new :class:`CountingState` where each count is the non-negative
             difference between the corresponding counts of *self* and *other*.
 
-        Example:
+        Examples:
             >>> from pythia.models.pm.population import Population
             >>> pop = Population()
             >>> wolf   = pop.register("wolf")

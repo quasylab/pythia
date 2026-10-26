@@ -52,7 +52,7 @@ class AgentStore:
         state: Private state variables owned by the agent.
             Defaults to an empty :class:`~pythia.models.yoda.store.Store`.
 
-    Example:
+    Examples:
         >>> from pythia.models.yoda.store import Store
         >>> s = AgentStore(
         ...     state=Store({"x": 1}),
@@ -86,7 +86,7 @@ class AgentStore:
     def state(self) -> Store:
         """The agent's private state variables.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store(), Store(), Store({"x": 1}))
             >>> s.state["x"]
@@ -98,7 +98,7 @@ class AgentStore:
     def features(self) -> Store:
         """The agent's derived or computed attributes.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store(), Store({"y": 2}), Store())
             >>> s.features["y"]
@@ -110,7 +110,7 @@ class AgentStore:
     def observations(self) -> Store:
         """The values observed from the environment or other agents.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store({"z": 3}), Store(), Store())
             >>> s.observations["z"]
@@ -132,7 +132,7 @@ class AgentStore:
             The resolved value, or ``None`` if the attribute is not defined
             in any layer.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(
             ...     state=Store({"a": 1}),
@@ -170,7 +170,7 @@ class AgentStore:
             ``True`` when *attribute* appears in :attr:`state`,
             :attr:`features`, or :attr:`observations`; ``False`` otherwise.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(
             ...     Store({"obs": 1}),
@@ -203,7 +203,7 @@ class AgentStore:
         Returns:
             A new :class:`AgentStore` instance.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store(), Store(), Store({"x": 1}))
             >>> s2 = s.set_state(Store({"x": 99}))
@@ -229,7 +229,7 @@ class AgentStore:
         Returns:
             A new :class:`AgentStore` instance.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store(), Store({"y": 2}), Store())
             >>> s2 = s.set_features(Store({"y": 99}))
@@ -255,7 +255,7 @@ class AgentStore:
         Returns:
             A new :class:`AgentStore` instance.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store({"z": 3}), Store(), Store())
             >>> s2 = s.set_observations(Store({"z": 99}))
@@ -291,7 +291,7 @@ class AgentStore:
         Returns:
             A new :class:`AgentStore` instance with updated features.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.store import Store
             >>> s = AgentStore(Store(), Store({"x": 0.0}), Store({"s": 1}))

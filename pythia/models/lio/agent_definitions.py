@@ -47,7 +47,7 @@ class AgentDefinitions:
     :meth:`total_weight`, :meth:`execute`, :meth:`select_action`, and
     :meth:`step`.
 
-    Example:
+    Examples:
         >>> from pythia.models.lio.action import Action
         >>> defs = AgentDefinitions()
         >>> a = defs.get("a")
@@ -86,7 +86,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *name* is empty.
 
-        Example:
+        Examples:
             >>> defs = AgentDefinitions()
             >>> x = defs.get("x")
             >>> defs.get("x") is x
@@ -116,7 +116,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *w* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()
             >>> a, b = defs.get("a"), defs.get("b")
@@ -144,7 +144,7 @@ class AgentDefinitions:
         Returns:
             The cumulative weight, or ``0.0`` if no such transition is defined.
 
-        Example:
+        Examples:
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()
             >>> a, b = defs.get("a"), defs.get("b")
@@ -168,7 +168,7 @@ class AgentDefinitions:
             The sum of weights over all reachable targets, or ``0.0`` if no
             transitions are defined for ``(source, action)``.
 
-        Example:
+        Examples:
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()
             >>> a, b, c = defs.get("a"), defs.get("b"), defs.get("c")
@@ -196,7 +196,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If no transitions are defined for ``(source, action)``.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()
@@ -236,7 +236,7 @@ class AgentDefinitions:
             ValueError: If *source* has no defined transitions, or if *wf*
                 returns ``0.0`` for every available action.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()
@@ -278,7 +278,7 @@ class AgentDefinitions:
             The next :class:`~pythia.models.lio.agent.Agent`, or *source* if
             no transitions are defined for it.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.lio.action import Action
             >>> defs = AgentDefinitions()

@@ -133,7 +133,7 @@ class TraceViewer:
             ValueError: If :attr:`tracer` contains no named objects, or if
                 any trajectory cannot be normalised over ``[start, end]``.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> from pythia.api.data_tracer import DataTracer
             >>> from pythia.util.trace_viewer import TraceViewer

@@ -41,7 +41,7 @@ class DataTable:
     Raises:
         ValueError: If *labels* is empty or contains duplicate entries.
 
-    Example:
+    Examples:
         >>> table = DataTable(["a", "b"])
         >>> table.add_row(0.0, {"a": 1.0, "b": 2.0})
         >>> table.add_row(1.0, {"a": 3.0, "b": 4.0})
@@ -71,7 +71,7 @@ class DataTable:
     def labels(self) -> tuple[str, ...]:
         """The column labels in the order they were supplied.
 
-        Example:
+        Examples:
             >>> DataTable(["x", "y"]).labels
             ('x', 'y')
         """
@@ -81,7 +81,7 @@ class DataTable:
     def times(self) -> tuple[float, ...]:
         """The observation timestamps in ascending order.
 
-        Example:
+        Examples:
             >>> table = DataTable(["v"])
             >>> table.add_row(2.0, {"v": 0.0})
             >>> table.add_row(0.5, {"v": 1.0})
@@ -111,7 +111,7 @@ class DataTable:
             TypeError: If any value is not a :class:`float` or :class:`int`
                 (booleans are rejected).
 
-        Example:
+        Examples:
             >>> table = DataTable(["x"])
             >>> table.add_row(1.0, {"x": 42.0})
             >>> table.get(1.0)["x"]
@@ -156,7 +156,7 @@ class DataTable:
         Raises:
             KeyError: If no row has been recorded at *time*.
 
-        Example:
+        Examples:
             >>> table = DataTable(["a", "b"])
             >>> table.add_row(0.0, {"a": 1.0, "b": 2.0})
             >>> table.get(0.0) == {"a": 1.0, "b": 2.0}
@@ -169,7 +169,7 @@ class DataTable:
     def __len__(self) -> int:
         """Return the number of recorded observations.
 
-        Example:
+        Examples:
             >>> table = DataTable(["v"])
             >>> len(table)
             0

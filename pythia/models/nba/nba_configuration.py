@@ -45,7 +45,7 @@ class NBAConfiguration:
         ValueError: If *counts* is empty or if any count is not a strictly
             positive integer.
 
-    Example:
+    Examples:
         >>> a = Agent("a")
         >>> b = Agent("b")
         >>> cfg = NBAConfiguration({a: 2, b: 1})
@@ -78,7 +78,7 @@ class NBAConfiguration:
     def counts(self) -> dict[Agent, int]:
         """A copy of the agent→count mapping.
 
-        Example:
+        Examples:
             >>> a = Agent("a")
             >>> cfg = NBAConfiguration({a: 3})
             >>> cfg.counts == {a: 3}
@@ -90,7 +90,7 @@ class NBAConfiguration:
     def size(self) -> int:
         """The total number of agents (sum of all counts).
 
-        Example:
+        Examples:
             >>> a = Agent("a")
             >>> b = Agent("b")
             >>> NBAConfiguration({a: 2, b: 3}).size
@@ -111,7 +111,7 @@ class NBAConfiguration:
         Returns:
             The count for *agent*, or ``0`` if *agent* is not present.
 
-        Example:
+        Examples:
             >>> a, b = Agent("a"), Agent("b")
             >>> cfg = NBAConfiguration({a: 4})
             >>> cfg.count(a)
@@ -132,7 +132,7 @@ class NBAConfiguration:
         Returns:
             A float in ``[0.0, 1.0]``.
 
-        Example:
+        Examples:
             >>> a, b = Agent("a"), Agent("b")
             >>> cfg = NBAConfiguration({a: 1, b: 3})
             >>> cfg.fraction(a)
@@ -167,7 +167,7 @@ class NBAConfiguration:
         Returns:
             A callable ``Channel -> bool``.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent_definitions import AgentDefinitions
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -208,7 +208,7 @@ class NBAConfiguration:
             the configuration to a :class:`set` of
             :class:`~pythia.models.nba.channel.Channel` objects.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent_definitions import AgentDefinitions
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -241,7 +241,7 @@ class NBAConfiguration:
             to the :class:`set` of :class:`~pythia.models.nba.agent.Agent`
             types in the configuration that can receive on it.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.agent_definitions import AgentDefinitions
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -290,7 +290,7 @@ class NBAConfiguration:
         Raises:
             ValueError: If *source* is not present in the configuration.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.agent_definitions import AgentDefinitions
             >>> from pythia.models.nba.channel import Channel
@@ -371,7 +371,7 @@ class NBAConfiguration:
             ValueError: If no agent in *receivers* is present in the
                 remaining configuration.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.agent_definitions import AgentDefinitions
             >>> from pythia.models.nba.channel import Channel
@@ -453,7 +453,7 @@ class NBAConfiguration:
             equal to the total weight and *next_cfg* is the successor
             :class:`NBAConfiguration`.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.agent_definitions import AgentDefinitions
             >>> from pythia.models.nba.channel import Channel

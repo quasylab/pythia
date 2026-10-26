@@ -78,7 +78,7 @@ class SimulationRunner:
     Raises:
         RunnerError: If *model* or *config* are not valid objects.
 
-    Example:
+    Examples:
         >>> runner = SimulationRunner(my_model, config, record_history=True)
         >>> state = runner.run()
         >>> len(runner.history)  # one entry per step

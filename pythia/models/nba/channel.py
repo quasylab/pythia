@@ -32,7 +32,7 @@ class Channel:
     Raises:
         ValueError: If *name* is empty.
 
-    Example:
+    Examples:
         >>> c1 = Channel("alpha")
         >>> c2 = Channel("alpha")
         >>> c1 == c2

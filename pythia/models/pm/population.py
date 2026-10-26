@@ -79,7 +79,7 @@ class Population:
     two species have the same :attr:`~pythia.models.pm.species.Species.index`
     if and only if they have the same name and attributes.
 
-    Example:
+    Examples:
         >>> pop = Population()
         >>> wolf = pop.register("wolf", {"diet": "carnivore"})
         >>> wolf2 = pop.register("wolf", {"diet": "carnivore"})
@@ -126,7 +126,7 @@ class Population:
         Raises:
             ValueError: If any value in *attributes* is not hashable.
 
-        Example:
+        Examples:
             >>> pop = Population()
             >>> s = pop.register("fox", {"habitat": "forest"})
             >>> s.index
@@ -161,7 +161,7 @@ class Population:
         Returns:
             Number of registered species.
 
-        Example:
+        Examples:
             >>> pop = Population()
             >>> _ = pop.register("deer")
             >>> len(pop)
@@ -175,7 +175,7 @@ class Population:
         Yields:
             Each registered :class:`Species`, from index 0 upward.
 
-        Example:
+        Examples:
             >>> pop = Population()
             >>> _ = pop.register("a")
             >>> _ = pop.register("b")
@@ -200,7 +200,7 @@ class Population:
             within this population and whose content matches the entry at
             that index.
 
-        Example:
+        Examples:
             >>> pop = Population()
             >>> wolf = pop.register("wolf")
             >>> wolf in pop
@@ -226,7 +226,7 @@ class Population:
         Raises:
             KeyError: If no species with *index* exists in this population.
 
-        Example:
+        Examples:
             >>> pop = Population()
             >>> wolf = pop.register("wolf")
             >>> pop[0] is wolf
@@ -249,7 +249,7 @@ class Population:
             A list of matching :class:`Species` instances in index order.
             Empty if no species with *name* are registered.
 
-        Example:
+        Examples:
             >>> pop = Population()
             >>> _ = pop.register("wolf", {"size": "large"})
             >>> _ = pop.register("wolf", {"size": "small"})

@@ -56,7 +56,7 @@ class Simulator:
             in each run.  Must have unique names (enforced by
             :class:`~pythia.api.collector.DataCollector`).
 
-    Example:
+    Examples:
         >>> from pythia.api import SimulationConfig
         >>> from pythia.api.measure import Measure
         >>> from pythia.api.simulator import Simulator

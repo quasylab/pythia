@@ -144,7 +144,7 @@ class BaseModel(abc.ABC):
             ConfigurationError: If any required field or metadata key is
                 absent or has an invalid value.
 
-        Example:
+        Examples:
             >>> class MyModel(BaseModel):
             ...     def validate_config(self, config):
             ...         super().validate_config(config)

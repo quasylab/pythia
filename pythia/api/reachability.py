@@ -61,7 +61,7 @@ class ReachabilityEstimator:
         ValueError: If *n_runs* is not strictly positive when :meth:`estimate`
             is called.
 
-    Example:
+    Examples:
         >>> from pythia.api import BaseModel, SimulationConfig, SimulationState
         >>> class AlwaysReachModel(BaseModel):
         ...     @property
@@ -121,7 +121,7 @@ class ReachabilityEstimator:
         Raises:
             ValueError: If *n_runs* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.api import BaseModel, SimulationConfig, SimulationState
             >>> class NeverReachModel(BaseModel):
             ...     @property
@@ -212,7 +212,7 @@ class ReachabilityEstimator:
             ValueError: If *n_runs* is not strictly positive or *dt* is not
                 strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.api import BaseModel, SimulationConfig, SimulationState
             >>> class StepModel(BaseModel):
             ...     @property

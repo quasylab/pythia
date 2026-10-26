@@ -49,7 +49,7 @@ class Tracer:
         data_tracer: The :class:`~pythia.api.data_tracer.DataTracer` that
             collects measurements during the run.
 
-    Example:
+    Examples:
         >>> from pythia.api import BaseModel, SimulationConfig, SimulationState
         >>> class CountModel(BaseModel):
         ...     @property
@@ -89,7 +89,7 @@ class Tracer:
             model: The simulation model to run.
             config: Run configuration.  ``config.max_time`` is the deadline.
 
-        Example:
+        Examples:
             >>> from pythia.api import BaseModel, SimulationConfig, SimulationState
             >>> class TrivialModel(BaseModel):
             ...     @property

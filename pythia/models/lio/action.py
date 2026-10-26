@@ -35,7 +35,7 @@ class Action:
     Raises:
         ValueError: If *name* is empty.
 
-    Example:
+    Examples:
         >>> a = Action("move")
         >>> b = Action("move")
         >>> a == b

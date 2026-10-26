@@ -65,7 +65,7 @@ class DataStatistics:
         ValueError: If *data* is empty, or if the tables have different labels
             or different time points.
 
-    Example:
+    Examples:
         >>> from pythia.api.data_table import DataTable
         >>> t1 = DataTable(["v"])
         >>> t1.add_row(0.0, {"v": 2.0})
@@ -150,7 +150,7 @@ class DataStatistics:
     def labels(self) -> tuple[str, ...]:
         """The column labels shared by all input tables.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["a", "b"])
             >>> t.add_row(0.0, {"a": 1.0, "b": 2.0})
@@ -163,7 +163,7 @@ class DataStatistics:
     def times(self) -> tuple[float, ...]:
         """The observation timestamps shared by all input tables.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(0.0, {"v": 1.0})
@@ -177,7 +177,7 @@ class DataStatistics:
     def n(self) -> int:
         """Number of runs (input tables).
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(0.0, {"v": 1.0})
@@ -194,7 +194,7 @@ class DataStatistics:
     def mean(self) -> DataTable:
         """Arithmetic mean across runs.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2 = DataTable(["v"]), DataTable(["v"])
             >>> t1.add_row(0.0, {"v": 1.0}); t2.add_row(0.0, {"v": 3.0})
@@ -207,7 +207,7 @@ class DataStatistics:
     def std(self) -> DataTable:
         """Sample standard deviation (ddof=1) across runs; 0.0 for a single run.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2 = DataTable(["v"]), DataTable(["v"])
             >>> t1.add_row(0.0, {"v": 1.0}); t2.add_row(0.0, {"v": 3.0})
@@ -225,7 +225,7 @@ class DataStatistics:
     def q2(self) -> DataTable:
         """50th percentile (median / second quartile) across runs.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2, t3 = DataTable(["v"]), DataTable(["v"]), DataTable(["v"])
             >>> for t, v in [(t1, 1.0), (t2, 2.0), (t3, 3.0)]:
@@ -244,7 +244,7 @@ class DataStatistics:
     def min(self) -> DataTable:
         """Minimum value across runs.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2 = DataTable(["v"]), DataTable(["v"])
             >>> t1.add_row(0.0, {"v": 1.0}); t2.add_row(0.0, {"v": 3.0})
@@ -257,7 +257,7 @@ class DataStatistics:
     def max(self) -> DataTable:
         """Maximum value across runs.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t1, t2 = DataTable(["v"]), DataTable(["v"])
             >>> t1.add_row(0.0, {"v": 1.0}); t2.add_row(0.0, {"v": 3.0})

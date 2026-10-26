@@ -48,7 +48,7 @@ class AgentConfiguration:
         agent_state: The behavioural state the agent currently occupies.
         agent_store: The layered data store associated with the agent.
 
-    Example:
+    Examples:
         >>> from pythia.models.yoda.agent import Agent
         >>> from pythia.models.yoda.agent_state import AgentState
         >>> from pythia.models.yoda.agent_store import AgentStore
@@ -82,7 +82,7 @@ class AgentConfiguration:
     def agent(self) -> Agent:
         """The participant this configuration belongs to.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -97,7 +97,7 @@ class AgentConfiguration:
     def agent_state(self) -> AgentState:
         """The behavioural state the agent currently occupies.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -112,7 +112,7 @@ class AgentConfiguration:
     def agent_store(self) -> AgentStore:
         """The layered data store associated with the agent.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -141,7 +141,7 @@ class AgentConfiguration:
         Returns:
             A new :class:`AgentConfiguration` with updated observations.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -181,7 +181,7 @@ class AgentConfiguration:
             A new :class:`AgentConfiguration` with the updated
             :attr:`agent_state` and state layer.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -217,7 +217,7 @@ class AgentConfiguration:
         Returns:
             A new :class:`AgentConfiguration` with updated features.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -265,7 +265,7 @@ class AgentConfiguration:
             A new :class:`AgentConfiguration` with an updated
             :attr:`agent_store`.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -316,7 +316,7 @@ class AgentConfiguration:
         Returns:
             A callable ``AgentConfiguration -> bool``.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
             >>> from pythia.models.yoda.agent_store import AgentStore

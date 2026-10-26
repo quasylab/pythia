@@ -100,7 +100,7 @@ class PopulationModel(BaseModel):
             :class:`random.Random` is created in :meth:`initialize` seeded
             with ``config.random_seed``.
 
-    Example:
+    Examples:
         >>> pop  = Population()
         >>> wolf = pop.register("wolf")
         >>> rule = Rule(

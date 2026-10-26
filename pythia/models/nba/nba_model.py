@@ -74,7 +74,7 @@ class NBAModel(BaseModel):
     State keys written:
         nba.configuration (NBAConfiguration): The population at the current step.
 
-    Example:
+    Examples:
         >>> from pythia.api import SimulationConfig, SimulationRunner
         >>> from pythia.models.nba.agent_definitions import AgentDefinitions
         >>> from pythia.models.nba.channel import Channel

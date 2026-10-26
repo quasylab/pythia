@@ -66,7 +66,7 @@ class DataCollector:
     Raises:
         ValueError: If two measures share the same name.
 
-    Example:
+    Examples:
         >>> from pythia.api.state import SimulationState
         >>> from pythia.api.measure import Measure
         >>> m = Measure("x", lambda s: s.elapsed_time, frequency=1.0)
@@ -117,7 +117,7 @@ class DataCollector:
     def frequency(self) -> float:
         """The shared sampling frequency (mean of individual measure frequencies).
 
-        Example:
+        Examples:
             >>> m1 = Measure("a", lambda s: 0.0, frequency=0.5)
             >>> m2 = Measure("b", lambda s: 0.0, frequency=1.5)
             >>> DataCollector([m1, m2]).frequency
@@ -136,7 +136,7 @@ class DataCollector:
         timestamps and :meth:`~pythia.api.data_table.DataTable.get` to
         retrieve all measure values at a specific time.
 
-        Example:
+        Examples:
             >>> from pythia.api.state import SimulationState
             >>> from pythia.api.measure import Measure
             >>> m = Measure("v", lambda s: 1.0, frequency=1.0)

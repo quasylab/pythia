@@ -60,7 +60,7 @@ class AgentDefinitions:
     All four transition tables store ``Agent -> Channel -> dict[Agent, float]``;
     the action type is encoded by which table is used.
 
-    Example:
+    Examples:
         >>> from pythia.models.nba.channel import Channel
         >>> c = Channel("x")
         >>> defs = AgentDefinitions()
@@ -102,7 +102,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *name* is empty.
 
-        Example:
+        Examples:
             >>> defs = AgentDefinitions()
             >>> x = defs.get("x")
             >>> defs.get("x") is x
@@ -138,7 +138,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *w* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("x")
             >>> defs = AgentDefinitions()
@@ -164,7 +164,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *w* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("x")
             >>> defs = AgentDefinitions()
@@ -190,7 +190,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *w* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("x")
             >>> defs = AgentDefinitions()
@@ -216,7 +216,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *w* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("x")
             >>> defs = AgentDefinitions()
@@ -251,7 +251,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *agent* has no receive transitions on *channel*.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -288,7 +288,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *agent* has no send transitions on *channel*.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -326,7 +326,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *agent* has no broadcast-send transitions on *channel*.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -374,7 +374,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *agent* has no enabled send channels.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> from pythia.models.nba.environment import Environment
@@ -420,7 +420,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *agent* has no broadcast-send transitions.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> from pythia.models.nba.environment import Environment
@@ -456,7 +456,7 @@ class AgentDefinitions:
             The selected next :class:`~pythia.models.nba.agent.Agent` state, or
             *agent* itself if it has no broadcast-receive transitions on *channel*.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> c = Channel("c")
@@ -510,7 +510,7 @@ class AgentDefinitions:
             ValueError: If *agent* has no enabled send or broadcast-send
                 actions (total exit rate is zero).
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.nba.channel import Channel
             >>> from pythia.models.nba.environment import Environment
@@ -568,7 +568,7 @@ class AgentDefinitions:
             ``agent --channel?--> target`` has been recorded, ``False``
             otherwise.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c, d = Channel("c"), Channel("d")
             >>> defs = AgentDefinitions()
@@ -595,7 +595,7 @@ class AgentDefinitions:
             ``agent --channel??--> target`` has been recorded, ``False``
             otherwise.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c, d = Channel("c"), Channel("d")
             >>> defs = AgentDefinitions()
@@ -624,7 +624,7 @@ class AgentDefinitions:
             objects.  The set is empty when *source* has no receive
             transitions.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c, d = Channel("c"), Channel("d")
             >>> defs = AgentDefinitions()
@@ -660,7 +660,7 @@ class AgentDefinitions:
             A :class:`set` of :class:`~pythia.models.nba.channel.Channel`
             objects.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c, d = Channel("c"), Channel("d")
             >>> defs = AgentDefinitions()
@@ -690,7 +690,7 @@ class AgentDefinitions:
             objects.  The set is empty when *source* has no broadcast-send
             transitions.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> c, d = Channel("c"), Channel("d")
             >>> defs = AgentDefinitions()
@@ -732,7 +732,7 @@ class AgentDefinitions:
         Returns:
             A non-negative float representing the total exit rate.
 
-        Example:
+        Examples:
             >>> from pythia.models.nba.channel import Channel
             >>> from pythia.models.nba.environment import Environment
             >>> c, d = Channel("c"), Channel("d")

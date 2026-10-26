@@ -4,7 +4,7 @@ This package exposes the core public API. Import from here for stable,
 version-guaranteed symbols. Internal submodule paths may change between
 minor releases.
 
-Example:
+Examples:
     >>> from pythia import SimulationConfig, SimulationRunner
     >>> from pythia import BaseModel, SimulationState
 """

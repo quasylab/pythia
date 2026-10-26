@@ -41,7 +41,7 @@ class Store:
     Raises:
         ValueError: If any attribute name is an empty string.
 
-    Example:
+    Examples:
         >>> s = Store({"a": 1, "b": "hello"})
         >>> s["a"]
         1
@@ -73,7 +73,7 @@ class Store:
     def attributes(self) -> frozenset[str]:
         """The set of attribute names present in this store.
 
-        Example:
+        Examples:
             >>> Store({"x": 1, "y": 2}).attributes == frozenset({"x", "y"})
             True
             >>> Store().attributes
@@ -84,7 +84,7 @@ class Store:
     def __contains__(self, attribute: object) -> bool:
         """Return ``True`` if *attribute* is defined in this store.
 
-        Example:
+        Examples:
             >>> s = Store({"x": 1})
             >>> "x" in s
             True
@@ -104,7 +104,7 @@ class Store:
         Returns:
             ``True`` when *attribute* is present; ``False`` otherwise.
 
-        Example:
+        Examples:
             >>> s = Store({"x": 1})
             >>> s.has("x")
             True
@@ -118,7 +118,7 @@ class Store:
     def __len__(self) -> int:
         """Return the number of attributes in this store.
 
-        Example:
+        Examples:
             >>> len(Store({"a": 1, "b": 2}))
             2
             >>> len(Store())
@@ -138,7 +138,7 @@ class Store:
         Raises:
             KeyError: If *attribute* is not defined in this store.
 
-        Example:
+        Examples:
             >>> Store({"x": 42})["x"]
             42
         """
@@ -155,7 +155,7 @@ class Store:
         Returns:
             The stored value or *default*.
 
-        Example:
+        Examples:
             >>> s = Store({"x": 1})
             >>> s.get("x")
             1
@@ -181,7 +181,7 @@ class Store:
             ``predicate(self[attribute])`` if *attribute* is present,
             ``False`` otherwise.
 
-        Example:
+        Examples:
             >>> s = Store({"x": 4, "flag": True})
             >>> s.test("x", lambda v: v > 3)
             True
@@ -216,7 +216,7 @@ class Store:
         Raises:
             ValueError: If *attribute* is an empty string.
 
-        Example:
+        Examples:
             >>> s = Store({"x": 1})
             >>> s2 = s.set("x", 10)
             >>> s2["x"]

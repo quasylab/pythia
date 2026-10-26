@@ -27,7 +27,7 @@ class SimulationState:
         is_done: Set to ``True`` by a model to request early termination
             (e.g. on convergence or an unrecoverable error).
 
-    Example:
+    Examples:
         >>> state = SimulationState()
         >>> state.advance(0.5)
         >>> state.step
@@ -65,7 +65,7 @@ class SimulationState:
             A new :class:`SimulationState` with the same field values,
             including a deep copy of :attr:`data`.
 
-        Example:
+        Examples:
             >>> state = SimulationState(step=3, data={"x": [1, 2, 3]})
             >>> snap = state.snapshot()
             >>> state.data["x"].append(4)

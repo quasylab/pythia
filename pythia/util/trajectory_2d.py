@@ -60,7 +60,7 @@ class Trajectory2D:
     Raises:
         ValueError: If *table* contains no rows.
 
-    Example:
+    Examples:
         >>> from pythia.api.data_table import DataTable
         >>> table = DataTable(["px", "py"])
         >>> table.add_row(0.0, {"px": 0.0, "py": 0.0})
@@ -107,7 +107,7 @@ class Trajectory2D:
         Raises:
             IndexError: If *index* is out of range.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(5.0, {"v": 1.0})
@@ -121,7 +121,7 @@ class Trajectory2D:
     def times(self) -> tuple[float, ...]:
         """Observation times in ascending order.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(1.0, {"v": 0.0})
@@ -135,7 +135,7 @@ class Trajectory2D:
     def xs(self) -> tuple[float, ...]:
         """X-coordinates in time order.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["px"])
             >>> t.add_row(0.0, {"px": 3.0})
@@ -149,7 +149,7 @@ class Trajectory2D:
     def ys(self) -> tuple[float, ...]:
         """Y-coordinates in time order.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["py"])
             >>> t.add_row(0.0, {"py": 4.0})
@@ -163,7 +163,7 @@ class Trajectory2D:
     def formats(self) -> tuple[str, ...]:
         """Matplotlib format strings in time order.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(0.0, {"v": 1.0})
@@ -260,7 +260,7 @@ class Trajectory2D:
             ValueError: If no time point ``k * dt`` falls within
                 ``[from_, to]``.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["px", "py"])
             >>> t.add_row(0.0, {"px": 0.0, "py": 0.0})
@@ -341,7 +341,7 @@ class Trajectory2D:
         Raises:
             ValueError: If the trajectory contains fewer than two points.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(0.0, {"v": 0.0})
@@ -363,7 +363,7 @@ class Trajectory2D:
     def __len__(self) -> int:
         """Number of recorded time points.
 
-        Example:
+        Examples:
             >>> from pythia.api.data_table import DataTable
             >>> t = DataTable(["v"])
             >>> t.add_row(0.0, {"v": 1.0})

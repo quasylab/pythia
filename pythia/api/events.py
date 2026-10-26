@@ -6,7 +6,7 @@ points in the run lifecycle; external components (loggers, visualisers,
 checkpointers) subscribe to those events without importing anything from the
 runner.
 
-Example:
+Examples:
     >>> bus = EventBus()
     >>> received = []
     >>> bus.subscribe(EventKind.STEP_COMPLETED, received.append)
@@ -78,7 +78,7 @@ class EventBus:
     handler are *caught and logged* — they are never propagated — so a broken
     plugin cannot abort a simulation run.
 
-    Example:
+    Examples:
         >>> bus = EventBus()
         >>> log = []
         >>> bus.subscribe(EventKind.RUN_STARTED, log.append)

@@ -72,7 +72,7 @@ class AgentDefinitions:
     Transitions are added one at a time via :meth:`add_transition`; the
     table starts empty.
 
-    Example:
+    Examples:
         >>> from pythia.models.yoda.action import Action
         >>> from pythia.models.yoda.agent import Agent
         >>> from pythia.models.yoda.agent_state import AgentState
@@ -107,7 +107,7 @@ class AgentDefinitions:
         Returns a copy of the containers at every level so that external
         mutations do not affect the internal state.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.action import Action
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -147,7 +147,7 @@ class AgentDefinitions:
         Raises:
             ValueError: If *weight* is not strictly positive.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.action import Action
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -181,7 +181,7 @@ class AgentDefinitions:
         not affect the internal table.  The callable values are not copied
         since functions are immutable.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.store import Store
@@ -213,11 +213,11 @@ class AgentDefinitions:
         Args:
             agent: The agent whose dynamics are being defined.
             f: A callable ``(rng, s, dt) -> Store`` where *rng* is a
-               :class:`random.Random` instance, *s* is an
-               :class:`~pythia.models.yoda.agent_store.AgentStore`, and
-               *dt* is a strictly positive float.
+                :class:`random.Random` instance, *s* is an
+                :class:`~pythia.models.yoda.agent_store.AgentStore`, and
+                *dt* is a strictly positive float.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -252,7 +252,7 @@ class AgentDefinitions:
             The registered dynamics callable, or :attr:`default_dynamics`
             if none has been recorded for *agent*.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
@@ -275,7 +275,7 @@ class AgentDefinitions:
         Returns a shallow copy of the mapping so that external mutations do
         not affect the internal table.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
             >>> from pythia.models.yoda.store import Store
@@ -307,11 +307,11 @@ class AgentDefinitions:
         Args:
             agent: The agent whose observation function is being defined.
             f: A callable ``(s, cfg) -> Store`` where *s* is the agent's
-               :class:`~pythia.models.yoda.agent_store.AgentStore` and
-               *cfg* is the current
-               :class:`~pythia.models.yoda.configuration.SystemConfiguration`.
+                :class:`~pythia.models.yoda.agent_store.AgentStore` and
+                *cfg* is the current
+                :class:`~pythia.models.yoda.configuration.SystemConfiguration`.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
             >>> from pythia.models.yoda.store import Store
@@ -339,7 +339,7 @@ class AgentDefinitions:
             :attr:`default_observation` if none has been recorded for
             *agent*.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
             >>> from pythia.models.yoda.store import Store
@@ -377,7 +377,7 @@ class AgentDefinitions:
             A new :class:`~pythia.models.yoda.agent_configuration.AgentConfiguration`
             with the features layer of its store updated.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -423,7 +423,7 @@ class AgentDefinitions:
             A new :class:`~pythia.models.yoda.configuration.SystemConfiguration`
             of the same size.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -471,7 +471,7 @@ class AgentDefinitions:
             reflecting the environmental evolution over *dt* time units
             followed by one action per agent.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -523,7 +523,7 @@ class AgentDefinitions:
             A new :class:`~pythia.models.yoda.configuration.SystemConfiguration`
             of the same size.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -569,7 +569,7 @@ class AgentDefinitions:
             A new :class:`~pythia.models.yoda.configuration.SystemConfiguration`
             reflecting the environmental evolution over *dt* time units.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -618,7 +618,7 @@ class AgentDefinitions:
             A new :class:`~pythia.models.yoda.configuration.SystemConfiguration`
             of the same size.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -663,7 +663,7 @@ class AgentDefinitions:
             A new :class:`~pythia.models.yoda.agent_configuration.AgentConfiguration`
             with the observations layer of its store updated.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -712,7 +712,7 @@ class AgentDefinitions:
         Returns:
             A non-negative float.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
             >>> from pythia.models.yoda.store import Store
@@ -760,7 +760,7 @@ class AgentDefinitions:
             A randomly selected enabled :class:`~pythia.models.yoda.action.Action`,
             or ``None`` if no action is enabled.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -827,7 +827,7 @@ class AgentDefinitions:
             KeyError: If *action* has no transitions defined for
                 ``(aconf.agent, aconf.agent_state)``.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -878,7 +878,7 @@ class AgentDefinitions:
             produced by the selected action, or *aconf* itself when no
             action is enabled.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
@@ -924,7 +924,7 @@ class AgentDefinitions:
             f: A callable ``AgentStore -> float`` returning a non-negative
                 value.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
             >>> from pythia.models.yoda.store import Store
@@ -956,7 +956,7 @@ class AgentDefinitions:
             f: A callable ``AgentStore -> float`` returning a non-negative
                 value.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_store import AgentStore
             >>> from pythia.models.yoda.store import Store

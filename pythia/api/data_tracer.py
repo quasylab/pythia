@@ -60,7 +60,7 @@ class DataTracer:
         AttributeError: On any attempt to reassign :attr:`labels` or
             :attr:`trace_function` after construction.
 
-    Example:
+    Examples:
         >>> from pythia.api.state import SimulationState
         >>> tracer = DataTracer(
         ...     labels=["x"],
@@ -92,7 +92,7 @@ class DataTracer:
     def labels(self) -> tuple[str, ...]:
         """The column labels shared by all data tables.
 
-        Example:
+        Examples:
             >>> DataTracer(["a", "b"], lambda s: {}).labels
             ('a', 'b')
         """
@@ -121,7 +121,7 @@ class DataTracer:
             state: The current simulation state.  ``state.elapsed_time`` is
                 used as the row timestamp.
 
-        Example:
+        Examples:
             >>> from pythia.api.state import SimulationState
             >>> tracer = DataTracer(["v"], lambda s: {"obj": {"v": s.elapsed_time}})
             >>> s = SimulationState(elapsed_time=2.5)
@@ -144,7 +144,7 @@ class DataTracer:
     def names(self) -> frozenset[str]:
         """The names of all objects for which data has been collected.
 
-        Example:
+        Examples:
             >>> from pythia.api.state import SimulationState
             >>> tracer = DataTracer(["x"], lambda s: {"a": {"x": 1.0}, "b": {"x": 2.0}})
             >>> tracer.trace(SimulationState())
@@ -166,7 +166,7 @@ class DataTracer:
         Raises:
             KeyError: If no data has been collected for *name*.
 
-        Example:
+        Examples:
             >>> from pythia.api.state import SimulationState
             >>> tracer = DataTracer(["v"], lambda s: {"obj": {"v": 9.8}})
             >>> tracer.trace(SimulationState())
@@ -182,7 +182,7 @@ class DataTracer:
     def tables(self) -> dict[str, DataTable]:
         """A shallow copy of the internal ``name -> DataTable`` mapping.
 
-        Example:
+        Examples:
             >>> from pythia.api.state import SimulationState
             >>> tracer = DataTracer(["x"], lambda s: {"p": {"x": 0.0}})
             >>> tracer.trace(SimulationState())
@@ -203,7 +203,7 @@ class DataTracer:
         Raises:
             KeyError: If no data has been collected for *name*.
 
-        Example:
+        Examples:
             >>> from pythia.api.state import SimulationState
             >>> tracer = DataTracer(["v"], lambda s: {"obj": {"v": s.elapsed_time}})
             >>> tracer.trace(SimulationState(elapsed_time=1.0))

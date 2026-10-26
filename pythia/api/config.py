@@ -30,7 +30,7 @@ class SimulationConfig:
     Raises:
         ConfigurationError: If ``max_time`` violates its constraint.
 
-    Example:
+    Examples:
         >>> cfg = SimulationConfig(max_time=100.0, random_seed=42)
         >>> cfg.max_time
         100.0
@@ -64,7 +64,7 @@ class SimulationConfig:
         Raises:
             ConfigurationError: If ``max_time`` is missing from *data*.
 
-        Example:
+        Examples:
             >>> cfg = SimulationConfig.from_dict({"max_time": 50.0})
             >>> cfg.max_time
             50.0
@@ -88,7 +88,7 @@ class SimulationConfig:
         Returns:
             A dictionary representation suitable for JSON or YAML serialisation.
 
-        Example:
+        Examples:
             >>> cfg = SimulationConfig(max_time=10.0)
             >>> cfg.to_dict()["max_time"]
             10.0

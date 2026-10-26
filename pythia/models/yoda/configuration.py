@@ -51,7 +51,7 @@ class SystemConfiguration:
     Raises:
         ValueError: If *elements* is empty.
 
-    Example:
+    Examples:
         >>> from pythia.models.yoda.agent import Agent
         >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
         >>> from pythia.models.yoda.agent_state import AgentState
@@ -78,7 +78,7 @@ class SystemConfiguration:
     def elements(self) -> tuple[AgentConfiguration, ...]:
         """The agent configurations as an immutable tuple, in order.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -108,7 +108,7 @@ class SystemConfiguration:
         Returns:
             A new :class:`SystemConfiguration` of the same size.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -151,7 +151,7 @@ class SystemConfiguration:
             configuration.  The list is empty when no agent satisfies
             *predicate*.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -195,7 +195,7 @@ class SystemConfiguration:
             ValueError: If the resulting configuration would be empty (i.e.
                 the current configuration has exactly one element).
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -228,7 +228,7 @@ class SystemConfiguration:
     def size(self) -> int:
         """Return the number of agent configurations in this configuration.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -254,7 +254,7 @@ class SystemConfiguration:
         Raises:
             IndexError: If *index* is out of range.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -288,7 +288,7 @@ class SystemConfiguration:
             ``True`` when at least one qualifying element satisfies
             *predicate*; ``False`` otherwise.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState
@@ -333,7 +333,7 @@ class SystemConfiguration:
             including vacuously when there are no qualifying elements;
             ``False`` otherwise.
 
-        Example:
+        Examples:
             >>> from pythia.models.yoda.agent import Agent
             >>> from pythia.models.yoda.agent_configuration import AgentConfiguration
             >>> from pythia.models.yoda.agent_state import AgentState

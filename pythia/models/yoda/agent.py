@@ -34,7 +34,7 @@ class Agent:
     Raises:
         ValueError: If *name* is empty.
 
-    Example:
+    Examples:
         >>> a1 = Agent("alice")
         >>> a2 = Agent("alice")
         >>> a1 == a2
@@ -56,7 +56,7 @@ class Agent:
     def name(self) -> str:
         """The unique string identifier for this agent.
 
-        Example:
+        Examples:
             >>> Agent("alice").name
             'alice'
         """

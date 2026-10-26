@@ -53,7 +53,7 @@ class Action:
     Raises:
         ValueError: If *name* is empty.
 
-    Example:
+    Examples:
         >>> import random
         >>> from pythia.models.yoda.store import Store
         >>> a = Action(
@@ -87,7 +87,7 @@ class Action:
     def name(self) -> str:
         """The human-readable identifier of this action.
 
-        Example:
+        Examples:
             >>> Action("move", lambda rng, s, o: s).name
             'move'
         """
@@ -97,7 +97,7 @@ class Action:
     def step_function(self) -> Callable[[random.Random, Store, Store], Store]:
         """The transition function ``(rng, state, observations) -> Store``.
 
-        Example:
+        Examples:
             >>> import random
             >>> a = Action("a", lambda rng, s, o: s.set("x", 9))
             >>> a.step_function(random.Random(0), Store(), Store())["x"]
@@ -123,7 +123,7 @@ class Action:
             A :class:`~pythia.models.yoda.store.Store` representing the
             agent's state after the action fires.
 
-        Example:
+        Examples:
             >>> import random
             >>> from pythia.models.yoda.store import Store
             >>> a = Action(
